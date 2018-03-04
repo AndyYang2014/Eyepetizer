@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.andyyang.eyepetizer.ui.view.category.CategoryHeaderView
+        android:id="@+id/category_header"
+        android:layout_width="match_parent"
+        android:layout_height="290dp"
+        android:fitsSystemWindows="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_category_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        app:layout_behavior="com.andyyang.eyepetizer.ui.view.category.CategoryDetailBehavior" />
+
+</android.support.design.widget.CoordinatorLayout>
