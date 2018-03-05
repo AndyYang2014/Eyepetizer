@@ -66,6 +66,7 @@ object C {
         return getRealHeight(px, STANDARD_HEIGHT.toFloat())
     }
 
+
     fun getRealHeight(px: Int, parentHeight: Float): Int? {
         return (px / parentHeight * getScreenHeight()!!).toInt()
     }

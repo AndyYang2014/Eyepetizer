@@ -11,4 +11,5 @@ interface onBitmapSavedListener {
     fun onSuccess()
 
     fun onFaiure(e: Exception)
+
 }

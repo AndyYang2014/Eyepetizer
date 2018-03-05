@@ -1,5 +1,6 @@
 package com.andyyang.eyepetizer.utils.glide
 
+import android.R.attr.path
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -7,13 +8,10 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
-
-import java.io.File
-import java.io.FileOutputStream
-
-import android.R.attr.path
 import com.andyyang.eyepetizer.interfaces.onBitmapSavedListener
 import com.bumptech.glide.Glide
+import java.io.File
+import java.io.FileOutputStream
 
 /**
  * Created by AndyYang

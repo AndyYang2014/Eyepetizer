@@ -44,5 +44,6 @@ class SplashActivity : BaseActivity() {
     override fun noStatusBar(): Boolean {
         return true
     }
+
 }
 

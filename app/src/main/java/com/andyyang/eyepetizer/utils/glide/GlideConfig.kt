@@ -27,6 +27,7 @@ class GlideConfig : OkHttpGlideModule() {
 
     override fun applyOptions(context: Context?, builder: GlideBuilder) {
         builder.setDiskCache(InternalCacheDiskCacheFactory(context, diskSize))  // 内存中
+
         builder.setDiskCache(ExternalCacheDiskCacheFactory(context, "cache", diskSize)) // sd卡中
 
         // 自定义内存和图片池大小
