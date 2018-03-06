@@ -14,6 +14,7 @@ import com.andyyang.eyepetizer.ui.base.BaseAdapter
 import com.andyyang.eyepetizer.ui.base.BaseFragment
 import com.andyyang.eyepetizer.utils.C
 import com.jcodecraeer.xrecyclerview.XRecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Created by AndyYang.
@@ -31,7 +32,7 @@ class GirlsFragment : BaseFragment() {
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
         recyclerView = rootView.findViewById(R.id.list_content)
-        recyclerView.layoutManager = GridLayoutManager(this.context, 2)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
         girlsAdapter = GirlsAdapter()
         recyclerView.adapter = girlsAdapter
         recyclerView.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
@@ -47,7 +48,7 @@ class GirlsFragment : BaseFragment() {
                 refresh()
             }
         })
-        girlsAdapter.setOnItemClickListener(object :BaseAdapter.OnItemClickListener{
+        girlsAdapter.setOnItemClickListener(object : BaseAdapter.OnItemClickListener {
             override fun onItemClick(v: View, position: Int) {
 
             }
@@ -82,6 +83,28 @@ class GirlsFragment : BaseFragment() {
                 recyclerView.setLoadingMoreEnabled(true)
             }
         }
+    }
+
+    var isFirst = true
+
+
+    override fun onResume() {
+        super.onResume()
+        if (isFirst) {
+            setupToolbar()
+            isFirst = false
+        }
+    }
+
+    override fun setupToolbar(): Boolean {
+//        if (super.setupToolbar()) {
+//            return true
+//        }
+//        super.setupToolbar()
+        activity.toolbar.setBackgroundColor(0xddffffff.toInt())
+        activity.iv_search.setImageBitmap(null)
+        activity.tv_bar_title.text = "妹子"
+        return true
     }
 
 }

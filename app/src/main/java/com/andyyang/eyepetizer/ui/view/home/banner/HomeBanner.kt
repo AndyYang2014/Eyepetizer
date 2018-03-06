@@ -30,8 +30,10 @@ class HomeBanner : FrameLayout {
     }
 
     fun setData(itemList: ArrayList<Item>) {
-        itemList.filter { item -> item.type == "banner2" }.forEach { item -> itemList.remove(item) }
+        itemList.filter { it.type == "banner2" }.forEach { itemList.remove(it) }
+        itemList.removeAt(0)
         bannerAdapter.datas = itemList
+        bannerAdapter.datas
         bannerAdapter.notifyDataSetChanged()
         setIndicators(itemList)
         setTitleSlogan(0)

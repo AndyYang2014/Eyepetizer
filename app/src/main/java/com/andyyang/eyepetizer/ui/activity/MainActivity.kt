@@ -25,7 +25,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initView() {
-        main_navigation.setMode(BottomNavigationBar.MODE_FIXED)
+        main_navigation.setMode(BottomNavigationBar.MODE_DEFAULT)
         main_navigation.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
 
         main_navigation

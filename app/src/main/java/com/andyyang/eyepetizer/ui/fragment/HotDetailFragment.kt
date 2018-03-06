@@ -18,13 +18,15 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView
  */
 class HotDetailFragment(var apiUrl: String) : BaseFragment() {
 
-    lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: XRecyclerView
     val presenter by lazy { HotCategoryPresenter(this) }
 
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
         recyclerView = rootView.findViewById(R.id.list_content)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
+        recyclerView.setLoadingMoreEnabled(false)
+        recyclerView.setPullRefreshEnabled(false)
         recyclerView.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         presenter.requestData(apiUrl)
     }

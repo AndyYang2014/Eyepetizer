@@ -36,6 +36,7 @@ class EmptyControlVideo(context: Context?, attrs: AttributeSet?) : StandardGSYVi
 
 
     open class EmptyControlVideoCallBack : VideoAllCallBack {
+
         override fun onEnterFullscreen(url: String?, vararg objects: Any?) {
 
         }

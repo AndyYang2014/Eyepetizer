@@ -77,14 +77,14 @@ class CategoryDetailBehavior(context: Context?, attrs: AttributeSet?) : Coordina
             }else if(marginTop > header!!.getMaxHeight()){
                 setRecyclerViewState(header!!.getMaxHeight())
             }
-            consumed!![1] = dy
+            consumed[1] = dy
         } else {//收回去了
             //如果recyclerview不能下滑了。。。
             if (!canSlideBottom()) {//不能下滑了
                 if (dy < 0) {
                     val marginTop = (recyclerview!!.translationY - dy).toInt()//recyclerview应该距离顶部的高度
                     setRecyclerViewState(marginTop)
-                    consumed!![1] = dy
+                    consumed[1] = dy
                 }
 
             }

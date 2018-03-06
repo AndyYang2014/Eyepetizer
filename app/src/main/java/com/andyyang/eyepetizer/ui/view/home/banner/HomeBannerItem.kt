@@ -92,8 +92,8 @@ class HomeBannerItem : FrameLayout {
     fun releasePlayer() {
         isInitVideoView = false
         if (videoView.visibility == View.VISIBLE) {
-            videoView.setStandardVideoAllCallBack(null);
-            GSYVideoPlayer.releaseAllVideos();
+            videoView.setStandardVideoAllCallBack(null)
+            GSYVideoPlayer.releaseAllVideos()
         }
     }
 

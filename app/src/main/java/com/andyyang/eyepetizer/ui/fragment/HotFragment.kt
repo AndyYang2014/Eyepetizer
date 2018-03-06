@@ -54,11 +54,12 @@ class HotFragment : BaseFragment() {
     }
 
 
+
     override fun setupToolbar(): Boolean {
-        if (super.setupToolbar()) {
-            return true
-        }
-        super.setupToolbar()
+//        if (super.setupToolbar()) {
+//            return true
+//        }
+//        super.setupToolbar()
         activity.toolbar.setBackgroundColor(0xddffffff.toInt())
         activity.iv_search.setImageResource(R.drawable.ic_action_search)
         activity.tv_bar_title.text = "热门"

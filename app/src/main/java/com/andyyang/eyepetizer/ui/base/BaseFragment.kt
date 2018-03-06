@@ -17,7 +17,6 @@ import com.andyyang.eyepetizer.utils.Logger
  * mail:andyyang2014@126.com
  */
 abstract class BaseFragment : Fragment(), LifeCycle {
-    protected var bundle: Bundle? = null
     private var lifeCycleListener: OnLifeCycleListener? = null
     lateinit protected var activity: BaseActivity
     protected lateinit var rootView: View
@@ -28,17 +27,6 @@ abstract class BaseFragment : Fragment(), LifeCycle {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = View.inflate(this.context, getFragmentLayoutId(), null)
-        bundle = savedInstanceState
-        if (noActionBar()) {
-            activity.supportActionBar!!.hide()
-        }
-
-        if (noStatusBar()) {
-            activity.window.setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
         initFragment(rootView, savedInstanceState)
         return rootView
     }
@@ -94,14 +82,6 @@ abstract class BaseFragment : Fragment(), LifeCycle {
 
     fun finishAllActivity() {
         activity.finishAllActivity()
-    }
-
-    protected fun noStatusBar(): Boolean {
-        return false
-    }
-
-    protected fun noActionBar(): Boolean {
-        return false
     }
 
     open fun setupToolbar(): Boolean {

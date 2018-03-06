@@ -14,6 +14,7 @@ import com.andyyang.eyepetizer.ui.adapter.CategoryAdapter
 import com.andyyang.eyepetizer.ui.base.BaseFragment
 import com.andyyang.eyepetizer.utils.C
 import com.jcodecraeer.xrecyclerview.XRecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 /**
@@ -64,9 +65,30 @@ class CategoryFragment : BaseFragment() {
         return R.layout.layout_list
     }
 
-
     fun showCategory(categorys: ArrayList<Category>) {
         adapter.setData(categorys)
+    }
+
+    var isFirst = true
+
+
+    override fun onResume() {
+        super.onResume()
+        if (isFirst) {
+            setupToolbar()
+            isFirst = false
+        }
+    }
+
+    override fun setupToolbar(): Boolean {
+//        if (super.setupToolbar()) {
+//            return true
+//        }
+//        super.setupToolbar()
+        activity.toolbar.setBackgroundColor(0xddffffff.toInt())
+        activity.iv_search.setImageResource(R.drawable.ic_action_search)
+        activity.tv_bar_title.text = "分类"
+        return true
     }
 
 

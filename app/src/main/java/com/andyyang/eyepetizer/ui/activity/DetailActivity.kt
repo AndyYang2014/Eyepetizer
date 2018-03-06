@@ -64,8 +64,8 @@ class DetailActivity : BaseActivity() {
         super.onConfigurationChanged(newConfig)
         videoView?.fullWindowPlayer?.fullscreenButton?.setOnClickListener {
             GSYVideoPlayer.backFromWindowFull(this)
-            if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
             }
 
         }

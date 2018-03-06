@@ -97,9 +97,9 @@ class HomeFragment : BaseFragment() {
      * recyclerview滚动的时候会调用这里，在这里设置toolbar
      */
     override fun setupToolbar(): Boolean {
-        if (super.setupToolbar()) {
-            return true
-        }
+//        if (super.setupToolbar()) {
+//            return true
+//        }
         val findFirstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
         if (findFirstVisibleItemPosition == 0) {//设置为透明
             activity.toolbar.setBackgroundColor(0x00000000)
