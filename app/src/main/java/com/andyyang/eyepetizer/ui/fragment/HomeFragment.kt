@@ -13,10 +13,9 @@ import com.andyyang.eyepetizer.modle.bean.Item
 import com.andyyang.eyepetizer.presenter.HomePresenter
 import com.andyyang.eyepetizer.ui.adapter.HomeAdapter
 import com.andyyang.eyepetizer.ui.base.BaseFragment
-import com.andyyang.eyepetizer.ui.view.home.PullRecyclerView
+import com.andyyang.eyepetizer.ui.view.home.banner.HomeBanner
 import com.andyyang.eyepetizer.ui.view.home.banner.HomeBannerItem
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
-import com.andyyang.eyepetizer.ui.view.home.banner.HomeBanner
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.text.SimpleDateFormat
@@ -59,11 +58,9 @@ class HomeFragment : BaseFragment() {
         homeAdapter = HomeAdapter()
         home_rv.adapter = homeAdapter
         home_rv.layoutManager = LinearLayoutManager(activity)
-        home_rv.setOnRefreshListener(object : PullRecyclerView.OnRefreshListener {
-            override fun onRefresh() {
-                presenter.requestFirstData()
-            }
-        })
+        home_rv.onRefresh = {
+            presenter.requestFirstData()
+        }
 
         home_rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {

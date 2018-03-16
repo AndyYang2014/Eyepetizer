@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_hot.*
  * mail: AndyyYang2014@126.com.
  */
 class HotFragment : BaseFragment() {
+    val presenter: HotFragmentPresenter = HotFragmentPresenter(this)
+
     override fun initFragment(view: View, savedInstanceState: Bundle?) {
         presenter.requestHotCategory()
     }
@@ -29,24 +31,14 @@ class HotFragment : BaseFragment() {
     fun setTabAndFragment(hotCategory: HotCategory) {
 
         val titleList = ArrayList<String>()
-        for (tab in hotCategory.tabInfo.tabList) {
-            titleList.add(tab.name)
-        }
+        hotCategory.tabInfo.tabList.mapTo(titleList) { it.name }
         val fragmentList = ArrayList<Fragment>()
-        for (tab in hotCategory.tabInfo.tabList) {
-            fragmentList.add(HotDetailFragment(tab.apiUrl))
-        }
+        hotCategory.tabInfo.tabList.mapTo(fragmentList) { HotDetailFragment(it.apiUrl) }
         val hotViewPagerAdapter = HotViewPagerAdapter(fragmentManager!!, titleList, fragmentList)
         vpMain.adapter = hotViewPagerAdapter
         tablayout.setupWithViewPager(vpMain)
 
         ViewUtil.setUpIndicatorWidth(tablayout)
-    }
-
-    val presenter: HotFragmentPresenter
-
-    init {
-        presenter = HotFragmentPresenter(this)
     }
 
 

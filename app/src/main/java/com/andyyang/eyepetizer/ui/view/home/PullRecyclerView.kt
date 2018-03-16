@@ -240,7 +240,7 @@ class PullRecyclerView : RecyclerView {
 
                 override fun onAnimationEnd(animation: Animator?) {
                     if (willRefresh) {
-                        onRefreshListner?.onRefresh()
+                        onRefresh?.invoke()
                         loading.startAnimation(loadAnimation)
                     } else {
                         hideLoading()
@@ -305,14 +305,5 @@ class PullRecyclerView : RecyclerView {
 
     }
 
-    interface OnRefreshListener {
-        fun onRefresh()
-    }
-
-    var onRefreshListner: OnRefreshListener? = null
-
-    fun setOnRefreshListener(listener: OnRefreshListener) {
-        this.onRefreshListner = listener
-    }
-
+    var onRefresh:(()->Unit)? = {}
 }

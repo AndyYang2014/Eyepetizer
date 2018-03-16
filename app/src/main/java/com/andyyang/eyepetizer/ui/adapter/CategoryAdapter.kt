@@ -40,7 +40,6 @@ class CategoryAdapter : BaseAdapter<ViewHolder>() {
 
     override fun getItemCount(): Int = if (data.size == 0) 0 else data.size + 1
 
-
     private val TYPE_STANDARD = 1
     private val TYPE_END = 2
 

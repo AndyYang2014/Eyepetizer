@@ -47,11 +47,11 @@ class DetailActivity : BaseActivity() {
         rv_detail.layoutManager = LinearLayoutManager(this)
         rv_detail.adapter = adapter
         initListener()
-        videoView.setRotateViewAuto(false)
+        videoView.isRotateViewAuto = false
         videoView.fullscreenButton.setOnClickListener {
 
-            if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             }
 
             videoView.startWindowFullscreen(this, true, true)
@@ -86,7 +86,6 @@ class DetailActivity : BaseActivity() {
                         BTN_SHARE -> showToast("分享（未实现）")
                     }
                 })
-
     }
 
 
