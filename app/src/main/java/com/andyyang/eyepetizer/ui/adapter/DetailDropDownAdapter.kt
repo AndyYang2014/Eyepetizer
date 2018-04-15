@@ -22,9 +22,9 @@ class DetailDropDownAdapter : BaseAdapter<ViewHolder>() {
         ArrayList<Item>()
     }
 
-    override fun onBindView(holder: com.andyyang.eyepetizer.ui.base.ViewHolder, position: Int) {
+    override fun onBindView(viewHolder: com.andyyang.eyepetizer.ui.base.ViewHolder, position: Int) {
 
-        val itemView = holder.itemView
+        val itemView = viewHolder.itemView
         when (getItemViewType(position)) {
             TYPE_VIDEO -> {
                 (itemView as DetailVideoCardView).setData(data[position], false)
@@ -35,16 +35,15 @@ class DetailDropDownAdapter : BaseAdapter<ViewHolder>() {
             }
             TYPE_REPLY -> {
                 (itemView as DetailReplyView).setData(data[position])
-//                itemView.setOnClickListener { onVideoClick?.invoke(data[position]) }
             }
             else -> {
-//                throw IllegalArgumentException("日狗，api蒙错了，出现了第三种情况")
+                throw IllegalArgumentException("日狗，api蒙错了，出现了第三种情况")
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        var itemView: View
+        val itemView: View
         when (viewType) {
             TYPE_VIDEO -> {
                 itemView = DetailVideoCardView(parent?.context)
@@ -66,7 +65,7 @@ class DetailDropDownAdapter : BaseAdapter<ViewHolder>() {
         return ViewHolder(itemView)
     }
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount()  = data.size
 
     override fun getItemViewType(position: Int): Int {
         if (data[position].data == null) {

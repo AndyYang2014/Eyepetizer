@@ -21,16 +21,9 @@ object NetWork {
     private val DEFAULT_TIMEOUT = 20L
 
     init {
-        val longging = Interceptor { chain ->
-            val request = chain.request()
-            Logger.e("okhttp", "okhttp--->" + request.url().toString())
-            chain.proceed(request)
-        }
-
         okHttpClient = OkHttpClient.Builder()
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .addInterceptor(longging)
                 .build()
 
         retrofit = Retrofit.Builder()

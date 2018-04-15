@@ -46,5 +46,5 @@ interface RequestApi {
     fun randomGirl(@Path("number") number: Int): Flowable<GankInfo>
 
     @GET(GIRL + "/{number}/{page}")
-    fun girls(@Path("number") number: Int, @Path("page") page: Int): Flowable<GirlsList>
+    fun girls(@Path("number") number: Int, @Path("page") page: Int): Flowable<GankInfo>
 }

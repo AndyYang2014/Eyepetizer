@@ -23,12 +23,12 @@ class CategoryAdapter : BaseAdapter<ViewHolder>() {
         ArrayList<Category>()
     }
 
-    override fun onBindView(holder: ViewHolder, position: Int) {
+    override fun onBindView(viewHolder: ViewHolder, position: Int) {
         val itemViewType = getItemViewType(position)
         when (itemViewType) {
             TYPE_STANDARD -> {
-                (holder.itemView as CategoryItem).setData(data[position])
-                holder.itemView.setOnClickListener { onClick?.invoke(data[position]) }
+                (viewHolder.itemView as CategoryItem).setData(data[position])
+                viewHolder.itemView.setOnClickListener { onClick?.invoke(data[position]) }
             }
         }
     }

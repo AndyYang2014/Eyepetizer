@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import com.andyyang.eyepetizer.modle.bean.Item
 import com.andyyang.eyepetizer.toActivityWithSerializable
 import com.andyyang.eyepetizer.ui.activity.DetailActivity
-import com.andyyang.eyepetizer.ui.view.hot.HotItem
 import com.andyyang.eyepetizer.ui.view.detail.ListEndView
+import com.andyyang.eyepetizer.ui.view.hot.HotItem
 import kotlinx.android.synthetic.main.layout_list_end.view.*
 
 /**
@@ -23,8 +23,7 @@ class HotCategoryAdapter : RecyclerView.Adapter<HotCategoryAdapter.ViewHolder>()
         notifyDataSetChanged()
     }
 
-    val TYPE_STANDARD = 1
-    val TYPE_END = 2
+
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         if (getItemViewType(position) == TYPE_STANDARD) {
             (holder?.itemView as HotItem).setData(data[position])
@@ -51,14 +50,16 @@ class HotCategoryAdapter : RecyclerView.Adapter<HotCategoryAdapter.ViewHolder>()
         return ViewHolder(itemView)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position == data.size) {
-            TYPE_END
-        } else {
-            TYPE_STANDARD
-        }
+    override fun getItemViewType(position: Int) = when (position) {
+        data.size -> TYPE_END
+        else -> TYPE_STANDARD
     }
 
     class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+
+    companion object {
+        val TYPE_STANDARD = 1
+        val TYPE_END = 2
+    }
 
 }

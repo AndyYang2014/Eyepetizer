@@ -3,18 +3,15 @@ package com.andyyang.eyepetizer.ui.fragment
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.widget.AdapterView
 import com.andyyang.eyepetizer.R
-import com.andyyang.eyepetizer.modle.bean.GirlsList
+import com.andyyang.eyepetizer.modle.bean.GankInfo
 import com.andyyang.eyepetizer.presenter.GirlsPresenter
-import com.andyyang.eyepetizer.ui.activity.BigImageActivity
 import com.andyyang.eyepetizer.ui.adapter.GirlsAdapter
-import com.andyyang.eyepetizer.ui.base.BaseAdapter
 import com.andyyang.eyepetizer.ui.base.BaseFragment
-import com.andyyang.eyepetizer.utils.C
 import com.jcodecraeer.xrecyclerview.XRecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_list.*
+import org.jetbrains.anko.support.v4.onUiThread
 
 /**
  * Created by AndyYang.
@@ -28,59 +25,51 @@ class GirlsFragment : BaseFragment() {
     lateinit var girlsAdapter: GirlsAdapter
     val presenter by lazy { GirlsPresenter(this) }
 
-    lateinit var recyclerView: XRecyclerView
-
-    override fun initFragment(view: View, savedInstanceState: Bundle?) {
-        recyclerView = rootView.findViewById(R.id.list_content)
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
-        girlsAdapter = GirlsAdapter()
-        recyclerView.adapter = girlsAdapter
-        recyclerView.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+    override fun initFragment(savedInstanceState: Bundle?) {
         pageNumber = 1
-        recyclerView.setPullRefreshEnabled(false)
+        girlsAdapter = GirlsAdapter()
+        with(list_content) {
+            layoutManager = GridLayoutManager(mActivity, 2)
+            adapter = girlsAdapter
+            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            setPullRefreshEnabled(false)
+            setLoadingListener(object : XRecyclerView.LoadingListener {
+                override fun onLoadMore() {
+                    loadmore()
+                }
+
+                override fun onRefresh() {
+                    this@GirlsFragment.refresh()
+                }
+            })
+        }
+
         presenter.requestData(pageCount, pageNumber, true)
-        recyclerView.setLoadingListener(object : XRecyclerView.LoadingListener {
-            override fun onLoadMore() {
-                loadmore()
-            }
-
-            override fun onRefresh() {
-                refresh()
-            }
-        })
-        girlsAdapter.setOnItemClickListener(object : BaseAdapter.OnItemClickListener {
-            override fun onItemClick(v: View, position: Int) {
-
-            }
-        })
     }
 
     private fun loadmore() {
-        recyclerView.setLoadingMoreEnabled(false)
+        list_content.setLoadingMoreEnabled(false)
         pageNumber++
         presenter.requestData(pageCount, pageNumber, false)
-
     }
 
     private fun refresh() {
         pageNumber = 1
-        recyclerView.setPullRefreshEnabled(false)
+        list_content.setPullRefreshEnabled(false)
         presenter.requestData(pageCount, pageNumber, true)
     }
 
-    override fun getFragmentLayoutId(): Int {
-        return R.layout.layout_list
-    }
+    override fun getFragmentLayoutId() = R.layout.layout_list
 
-    fun showGirls(result: List<GirlsList.Result>, isInit: Boolean) {
-        C.mainHandler.post {
+    fun showGirls(result: List<GankInfo.Result>, isInit: Boolean) {
+        onUiThread {
             girlsAdapter.upData(result, isInit)
             if (isInit) {
-                recyclerView.refreshComplete()
-                recyclerView.setPullRefreshEnabled(true)
+                list_content.refreshComplete()
+                list_content.setPullRefreshEnabled(true)
             } else {
-                recyclerView.loadMoreComplete()
-                recyclerView.setLoadingMoreEnabled(true)
+                list_content.loadMoreComplete()
+                list_content.setLoadingMoreEnabled(true)
             }
         }
     }
@@ -101,9 +90,9 @@ class GirlsFragment : BaseFragment() {
 //            return true
 //        }
 //        super.setupToolbar()
-        activity.toolbar.setBackgroundColor(0xddffffff.toInt())
-        activity.iv_search.setImageBitmap(null)
-        activity.tv_bar_title.text = "妹子"
+        mActivity.toolbar.setBackgroundColor(0xddffffff.toInt())
+        mActivity.iv_search.setImageBitmap(null)
+        mActivity.tv_bar_title.text = "妹子"
         return true
     }
 

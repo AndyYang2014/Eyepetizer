@@ -18,7 +18,6 @@ class HotFragmentPresenter(view: HotFragment) : BasePresenter<HotFragment>(view)
                     view.setTabAndFragment(it)
                 }, {
                     it.printStackTrace()
-                    view.onError()
                 })
     }
 

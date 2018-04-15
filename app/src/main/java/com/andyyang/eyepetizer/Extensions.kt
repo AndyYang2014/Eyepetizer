@@ -6,7 +6,9 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Parcelable
 import android.support.v4.app.Fragment
+import android.widget.ImageView
 import android.widget.Toast
+import com.andyyang.eyepetizer.utils.ImageLoader
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -143,4 +145,8 @@ fun Context.getNetType(): Int {
         }
     }
     return 0
+}
+
+fun ImageView.displayUrl(url: String) {
+    ImageLoader.load(context, url, this)
 }

@@ -2,7 +2,7 @@ package com.andyyang.eyepetizer.ui.adapter
 
 
 import android.view.ViewGroup
-import com.andyyang.eyepetizer.modle.bean.GirlsList
+import com.andyyang.eyepetizer.modle.bean.GankInfo
 import com.andyyang.eyepetizer.ui.activity.BigImageActivity
 import com.andyyang.eyepetizer.ui.base.BaseAdapter
 import com.andyyang.eyepetizer.ui.base.ViewHolder
@@ -18,7 +18,7 @@ import java.util.*
 class GirlsAdapter : BaseAdapter<ViewHolder>() {
 
     val data by lazy {
-        ArrayList<GirlsList.Result>()
+        ArrayList<GankInfo.Result>()
     }
 
     override fun onBindView(viewHolder: ViewHolder, position: Int) {
@@ -28,16 +28,13 @@ class GirlsAdapter : BaseAdapter<ViewHolder>() {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseAdapter.BaseViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(GirlsItemView(parent.context))
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    override fun getItemCount() = data.size
 
-
-    fun upData(newDatas: List<GirlsList.Result>, init: Boolean) {
+    fun upData(newDatas: List<GankInfo.Result>, init: Boolean) {
         if (init) data.clear()
         this.data.addAll(newDatas)
         notifyDataSetChanged()

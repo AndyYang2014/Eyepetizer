@@ -1,4 +1,4 @@
-package com.andyyang.eyepetizer.utils.glide
+package com.andyyang.eyepetizer.utils
 
 import android.R.attr.path
 import android.content.Context
@@ -32,7 +32,7 @@ object ImageLoader {
             }
         }
         Glide.with(context)
-                .load(QiNiuUtils.setUrl(url, 320))
+                .load(url)
                 .centerCrop()
                 .crossFade()
                 .into(view)

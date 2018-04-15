@@ -8,6 +8,9 @@ import io.reactivex.disposables.Disposable
  * mail: AndyyYang2014@126.com.
  */
 interface RxJavaImpl {
+
     fun dispose(disposable: Disposable)
+
     fun addDisposable(disposable: Disposable)
+
 }

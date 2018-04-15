@@ -6,10 +6,8 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import com.andyyang.eyepetizer.interfaces.LifeCycle
 import com.andyyang.eyepetizer.interfaces.OnLifeCycleListener
-import com.andyyang.eyepetizer.utils.Logger
 
 /**
  * Created by AndyYang
@@ -18,70 +16,65 @@ import com.andyyang.eyepetizer.utils.Logger
  */
 abstract class BaseFragment : Fragment(), LifeCycle {
     private var lifeCycleListener: OnLifeCycleListener? = null
-    lateinit protected var activity: BaseActivity
-    protected lateinit var rootView: View
+    lateinit protected var mActivity: BaseActivity
 
     override fun setOnLifeCycleListener(lifeCycleListener: OnLifeCycleListener) {
         this.lifeCycleListener = lifeCycleListener
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootView = View.inflate(this.context, getFragmentLayoutId(), null)
-        initFragment(rootView, savedInstanceState)
-        return rootView
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            View.inflate(mActivity, getFragmentLayoutId(), null)!!
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initFragment(savedInstanceState)
     }
 
-    protected abstract fun initFragment(view: View, savedInstanceState: Bundle?)
+    protected abstract fun initFragment(savedInstanceState: Bundle?)
 
     protected abstract fun getFragmentLayoutId(): Int
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        activity = context as BaseActivity
+        mActivity = context as BaseActivity
     }
 
     override fun onStart() {
         super.onStart()
         lifeCycleListener?.let { lifeCycleListener!!.onStart() }
-        Logger.d(this.javaClass.simpleName + " onStart")
     }
 
     override fun onResume() {
         super.onResume()
         lifeCycleListener?.let { lifeCycleListener!!.onResume() }
-        Logger.d(this.javaClass.simpleName + " onResume")
     }
 
     override fun onPause() {
         super.onPause()
         lifeCycleListener?.let { lifeCycleListener!!.onPause() }
-        Logger.d(this.javaClass.simpleName + " onPause")
     }
 
     override fun onStop() {
         super.onStop()
         lifeCycleListener?.let { lifeCycleListener!!.onStop() }
-        Logger.d(this.javaClass.simpleName + " onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         lifeCycleListener?.let { lifeCycleListener!!.onDestroy() }
-        Logger.d(this.javaClass.simpleName + " onDestory")
     }
 
 
     fun finishActivityByName(vararg activityClasses: Class<out BaseActivity>) {
-        activity.finishActivityByName(*activityClasses)
+        mActivity.finishActivityByName(*activityClasses)
     }
 
     fun finishAllActivityAbord(vararg activityClasses: Class<out BaseActivity>) {
-        activity.finishAllActivityAbord(*activityClasses)
+        mActivity.finishAllActivityAbord(*activityClasses)
     }
 
     fun finishAllActivity() {
-        activity.finishAllActivity()
+        mActivity.finishAllActivity()
     }
 
     open fun setupToolbar(): Boolean {

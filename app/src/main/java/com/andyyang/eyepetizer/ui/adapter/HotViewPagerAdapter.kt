@@ -10,28 +10,13 @@ import android.support.v4.app.FragmentPagerAdapter
  * mail: AndyyYang2014@126.com.
  */
 
-class HotViewPagerAdapter : FragmentPagerAdapter {
+class HotViewPagerAdapter(supportFragmentManager: FragmentManager, private var titleList: ArrayList<String>?,
+                          private var fragmentList: ArrayList<Fragment>?) : FragmentPagerAdapter(supportFragmentManager) {
 
+    override fun getCount() = fragmentList?.size ?: 0
 
-    var titleList: ArrayList<String>? = null
-    var fragmentList: ArrayList<Fragment>? = null
+    override fun getPageTitle(position: Int) = titleList!![position]
 
-    constructor(supportFragmentManager: FragmentManager, titleList: ArrayList<String>?, fragmentList: ArrayList<Fragment>?) : super(supportFragmentManager) {
-        this.titleList = titleList
-        this.fragmentList = fragmentList
-    }
-
-
-    override fun getCount(): Int = if (fragmentList != null) fragmentList!!.size else 0
-
-    override fun getPageTitle(position: Int): CharSequence {
-        return titleList!![position]
-    }
-
-    override fun getItem(position: Int): Fragment {
-        return fragmentList!![position]
-
-    }
-
+    override fun getItem(position: Int) = fragmentList!![position]
 
 }

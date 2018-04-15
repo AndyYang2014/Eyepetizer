@@ -5,9 +5,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import com.andyyang.eyepetizer.R
-import com.andyyang.eyepetizer.modle.bean.GirlsList
-import com.andyyang.eyepetizer.ui.activity.BigImageActivity
-import com.andyyang.eyepetizer.utils.glide.ImageLoader
+import com.andyyang.eyepetizer.displayUrl
+import com.andyyang.eyepetizer.modle.bean.GankInfo
 import kotlinx.android.synthetic.main.view_item_girls.view.*
 
 /**
@@ -16,8 +15,6 @@ import kotlinx.android.synthetic.main.view_item_girls.view.*
  * mail: AndyyYang2014@126.com.
  */
 class GirlsItemView : FrameLayout {
-
-    private lateinit var information: GirlsList.Result
 
     constructor(context: Context) : super(context) {
         init(context)
@@ -36,9 +33,8 @@ class GirlsItemView : FrameLayout {
         val view = View.inflate(context, R.layout.view_item_girls, this)
     }
 
-    fun bindData(result: GirlsList.Result) {
-        information = result
-        ImageLoader.load(context, result.url, girl_face)
+    fun bindData(result: GankInfo.Result) {
+        girl_face.displayUrl(result.url)
         girl_date.text = result.publishedAt.substring(0, 10)
     }
 

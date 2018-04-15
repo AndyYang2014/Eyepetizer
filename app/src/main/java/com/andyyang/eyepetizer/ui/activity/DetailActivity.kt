@@ -38,26 +38,36 @@ import java.util.*
  * mail: AndyyYang2014@126.com.
  */
 class DetailActivity : BaseActivity() {
+
     val presenter by lazy { DetailPresenter(this) }
-    val adapter by lazy { DetailAdapter() }
-    var itemData: Item? = null
-    val dropDownViews = Stack<DetailDropDownView>()
-    var backgroundBuilder: BitmapRequestBuilder<String, Bitmap>? = null
+    lateinit var adapter: DetailAdapter
+    private lateinit var itemData: Item
+    private val dropDownViews = Stack<DetailDropDownView>()
+    private var backgroundBuilder: BitmapRequestBuilder<String, Bitmap>? = null
+
+    override fun getActivityLayoutId() = R.layout.activity_detail
+
+    override fun initActivity(savedInstanceState: Bundle?) {
+        initView()
+        loadData()
+    }
+
     private fun initView() {
-        rv_detail.layoutManager = LinearLayoutManager(this)
-        rv_detail.adapter = adapter
-        initListener()
-        videoView.isRotateViewAuto = false
-        videoView.fullscreenButton.setOnClickListener {
-
-            if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-            }
-
-            videoView.startWindowFullscreen(this, true, true)
-
+        adapter = DetailAdapter()
+        with(rv_detail) {
+            layoutManager = LinearLayoutManager(this@DetailActivity)
+            adapter = this@DetailActivity.adapter
         }
-
+        initListener()
+        with(videoView) {
+            isRotateViewAuto = false
+            fullscreenButton.setOnClickListener {
+                if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                }
+                startWindowFullscreen(this@DetailActivity, true, true)
+            }
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -65,12 +75,9 @@ class DetailActivity : BaseActivity() {
         videoView?.fullWindowPlayer?.fullscreenButton?.setOnClickListener {
             GSYVideoPlayer.backFromWindowFull(this)
             if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             }
-
         }
-
-
     }
 
     private fun initListener() {
@@ -80,7 +87,7 @@ class DetailActivity : BaseActivity() {
                     when (it) {
                         BTN_AUTHOR -> showToast("跳到作者")
                         BTN_DOWLOAD -> showToast("下载（未实现）")
-                        BTN_REPLY -> presenter.requestReply(itemData?.data?.id!!)
+                        BTN_REPLY -> presenter.requestReply(itemData.data?.id!!)
                         BTN_FAVORITES -> showToast("喜欢（未实现）")
                         BTN_WATCH -> showToast("加关注（未实现）")
                         BTN_SHARE -> showToast("分享（未实现）")
@@ -89,17 +96,9 @@ class DetailActivity : BaseActivity() {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
-        initView()
-        loadData()
-    }
-
-
     private fun loadData() {
         itemData = intent.getSerializableExtra("data") as Item
-        presenter.requestBasicDataFromMemory(itemData!!)
+        presenter.requestBasicDataFromMemory(itemData)
     }
 
 
@@ -121,7 +120,6 @@ class DetailActivity : BaseActivity() {
     fun setPlayer(playUrl: String) {
         videoView.setUp(playUrl, false, "")
         videoView.startPlayLogic()
-//        GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)
     }
 
     fun setMovieAuthorInfo(info: Item) {
@@ -130,9 +128,7 @@ class DetailActivity : BaseActivity() {
     }
 
 
-    fun setRelated(items: ArrayList<Item>) {
-        adapter.addData(items)
-    }
+    fun setRelated(items: ArrayList<Item>) = adapter.addData(items)
 
     fun setBackground(url: String) {
         backgroundBuilder = Glide.with(this).load(url).asBitmap()
@@ -149,7 +145,7 @@ class DetailActivity : BaseActivity() {
                         //将图形的像素点按照这个矩阵进行旋转
                         //将矩阵加载到bitmap对象上，进行输出就可以了  如何创建Bitmap对象
                         //待旋转的bitmap对象，待旋转图片的宽度，待旋转图片的高度
-                        return Bitmap.createBitmap(toTransform, 0, 0, toTransform!!.getWidth(), toTransform.getHeight(), matrix, true)
+                        return Bitmap.createBitmap(toTransform, 0, 0, toTransform!!.width, toTransform.height, matrix, true)
                     }
                 })
                 .format(DecodeFormat.PREFER_ARGB_8888).centerCrop()
@@ -175,8 +171,8 @@ class DetailActivity : BaseActivity() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    val childCount = detailDropDownView.rv_detail_more.getChildCount()
-                    val itemCount = detailDropDownView.rv_detail_more.layoutManager.getItemCount()
+                    val childCount = detailDropDownView.rv_detail_more.childCount
+                    val itemCount = detailDropDownView.rv_detail_more.layoutManager.itemCount
                     val firstVisibleItem = (detailDropDownView.rv_detail_more.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                     if (firstVisibleItem + childCount == itemCount) {
                         if (!loadingMore) {
@@ -195,19 +191,19 @@ class DetailActivity : BaseActivity() {
     }
 
     //dropdown里请求的数据的disposable，需要在销毁的时候dispose
-    var dropDownDisPoseable: Disposable? = null
+    private var dropDownDisPoseable: Disposable? = null
 
     fun onLoadMore(title: String) {
-        if (title.contains("评论")) {
-            dropDownDisPoseable = presenter.requestMoreReply()
+        dropDownDisPoseable = if (title.contains("评论")) {
+            presenter.requestMoreReply()
         } else {
-            dropDownDisPoseable = presenter.requestRelatedAllMoreList()
+            presenter.requestRelatedAllMoreList()
         }
     }
 
     var dropDownHeight = 0
 
-    fun playDropDownAnimation(view: DetailDropDownView, show: Boolean) {
+    private fun playDropDownAnimation(view: DetailDropDownView, show: Boolean) {
         var translateAnimation: Animation
         if ((dropDownHeight == 0)) {
             view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -224,34 +220,33 @@ class DetailActivity : BaseActivity() {
                 }
             })
         } else {
-            if (show) {
-                translateAnimation = TranslateAnimation(0f, 0f, dropDownHeight.toFloat(), 0f)
+            translateAnimation = if (show) {
+                TranslateAnimation(0f, 0f, dropDownHeight.toFloat(), 0f)
             } else {
-                translateAnimation = TranslateAnimation(0f, 0f, 0f, dropDownHeight.toFloat())
+                TranslateAnimation(0f, 0f, 0f, dropDownHeight.toFloat())
             }
             translateAnimation.duration = 100
             view.startAnimation(translateAnimation)
         }
     }
 
-    fun closeDropDownView(): Boolean {
+    private fun closeDropDownView(): Boolean {
         if (dropDownViews.size == 0) {
             return false
         }
         if (dropDownDisPoseable != null && !(dropDownDisPoseable?.isDisposed!!)) {
             dropDownDisPoseable?.dispose()
         }
-        playDropDownAnimation(dropDownViews.get(dropDownViews.size - 1), false)
-        root.removeView(dropDownViews.get(dropDownViews.size - 1))
+        playDropDownAnimation(dropDownViews[dropDownViews.size - 1], false)
+        root.removeView(dropDownViews[dropDownViews.size - 1])
         dropDownViews.pop()
         return true
     }
 
     override fun onBackPressed() {
-
         if (StandardGSYVideoPlayer.backFromWindowFull(this)) {
-            if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_PORTRAIT) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             }
             return
         }
@@ -263,13 +258,13 @@ class DetailActivity : BaseActivity() {
     }
 
     fun setDropDownView(issue: Issue) {
-        val topDropDownView = dropDownViews.get(dropDownViews.size - 1)
+        val topDropDownView = dropDownViews[dropDownViews.size - 1]
         topDropDownView.setDropDownData(issue.itemList)
     }
 
     fun setMoreDropDownView(issue: Issue?) {
         loadingMore = false
-        val topDropDownView = dropDownViews.get(dropDownViews.size - 1)
+        val topDropDownView = dropDownViews[dropDownViews.size - 1]
         issue?.let {
             topDropDownView.addDropDownData(issue.itemList)
             return

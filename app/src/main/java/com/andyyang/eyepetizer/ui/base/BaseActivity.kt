@@ -1,7 +1,6 @@
 package com.andyyang.eyepetizer.ui.base
 
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import com.andyyang.eyepetizer.interfaces.LifeCycle
@@ -13,9 +12,9 @@ import com.andyyang.eyepetizer.interfaces.OnLifeCycleListener
  * mail:andyyang2014@126.com
  */
 
-open class BaseActivity : AppCompatActivity(), LifeCycle {
+abstract class BaseActivity : AppCompatActivity(), LifeCycle {
 
-    private var exitDialog: AlertDialog? = null
+    private val activities = ArrayList<BaseActivity>()
     private var lifeCycleListener: OnLifeCycleListener? = null
 
     override fun setOnLifeCycleListener(lifeCycleListener: OnLifeCycleListener) {
@@ -24,6 +23,7 @@ open class BaseActivity : AppCompatActivity(), LifeCycle {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(getActivityLayoutId())
 
         if (noActionBar()) {
             supportActionBar!!.hide()
@@ -36,8 +36,13 @@ open class BaseActivity : AppCompatActivity(), LifeCycle {
             )
         }
 
+        initActivity(savedInstanceState)
         activities.add(this)
     }
+
+    abstract fun initActivity(savedInstanceState: Bundle?)
+
+    abstract fun getActivityLayoutId(): Int
 
 
     override fun onStart() {
@@ -68,22 +73,22 @@ open class BaseActivity : AppCompatActivity(), LifeCycle {
 
     fun finishActivityByName(vararg activityClasses: Class<out BaseActivity>) {
         for (activity in activities) {
-            for (activityClass in activityClasses) {
-                if (activity.javaClass == activityClass) {
-                    activity.finish()
-                }
-            }
+            activityClasses
+                    .filter { activity.javaClass == it }
+                    .forEach { activity.finish() }
         }
     }
 
     fun finishAllActivityAbord(vararg activityClasses: Class<out BaseActivity>) {
         for (activity in activities) {
-            for (activityClass in activityClasses) {
-                if (activity.javaClass != activityClass) {
-                    activity.finish()
-                }
-            }
+            activityClasses
+                    .filter { activity.javaClass != it }
+                    .forEach { activity.finish() }
         }
+    }
+
+    fun getCurrentActivity(pager: Int = 0): BaseActivity {
+        return activities[activities.size - pager - 1]
     }
 
     fun finishAllActivity() {
@@ -94,16 +99,7 @@ open class BaseActivity : AppCompatActivity(), LifeCycle {
 
     override fun onBackPressed() {
         if (activities.size == 1) {
-            val builder = AlertDialog.Builder(this)
-                    .setMessage("确认退出应用？")
-                    .setPositiveButton("确认") { _, _ -> super@BaseActivity.onBackPressed() }
-                    .setNegativeButton("取消") { _, _ ->
-                        if (exitDialog != null) {
-                            exitDialog!!.dismiss()
-                        }
-                    }
-            builder.setCancelable(false)
-            exitDialog = builder.show()
+            moveTaskToBack(true)
         } else {
             super.onBackPressed()
         }
@@ -116,18 +112,5 @@ open class BaseActivity : AppCompatActivity(), LifeCycle {
     protected fun noActionBar(): Boolean {
         return false
     }
-
-    companion object {
-
-        private val activities = ArrayList<BaseActivity>()
-
-        val currentActivity: BaseActivity
-            get() = activities[activities.size - 1]
-
-        fun getCurrentActivity(pager: Int = 0): BaseActivity {
-            return activities[activities.size - pager - 1]
-        }
-    }
-
 
 }

@@ -4,8 +4,8 @@ import android.view.ViewGroup
 import com.andyyang.eyepetizer.modle.bean.Item
 import com.andyyang.eyepetizer.toActivityWithSerializable
 import com.andyyang.eyepetizer.ui.activity.DetailActivity
-import com.andyyang.eyepetizer.ui.base.ViewHolder
 import com.andyyang.eyepetizer.ui.base.BaseAdapter
+import com.andyyang.eyepetizer.ui.base.ViewHolder
 import com.andyyang.eyepetizer.ui.view.common.StandardVideoItem
 
 /**
@@ -15,7 +15,7 @@ import com.andyyang.eyepetizer.ui.view.common.StandardVideoItem
  */
 
 class CategoryDetailAdapter : BaseAdapter<ViewHolder>() {
-    val categorys: ArrayList<Item> by lazy {
+    private val categorys: ArrayList<Item> by lazy {
         ArrayList<Item>()
     }
 
@@ -24,14 +24,14 @@ class CategoryDetailAdapter : BaseAdapter<ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): BaseViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         return ViewHolder(StandardVideoItem(parent!!.context))
     }
 
-    override fun getItemCount(): Int = categorys.size
+    override fun getItemCount() = categorys.size
 
-    override fun onBindView(holder: ViewHolder, position: Int) {
-        (holder.itemView as StandardVideoItem).let {
+    override fun onBindView(viewHolder: ViewHolder, position: Int) {
+        (viewHolder.itemView as StandardVideoItem).let {
             it.setOnClickListener { v -> v.context.toActivityWithSerializable<DetailActivity>(categorys[position]) }
             it.setData(categorys[position], "categorydetail")
         }

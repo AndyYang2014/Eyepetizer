@@ -13,8 +13,8 @@ import com.andyyang.eyepetizer.ui.activity.CategoryDetailActivity
 import com.andyyang.eyepetizer.ui.adapter.CategoryAdapter
 import com.andyyang.eyepetizer.ui.base.BaseFragment
 import com.andyyang.eyepetizer.utils.C
-import com.jcodecraeer.xrecyclerview.XRecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_list.*
 import java.util.*
 
 /**
@@ -23,14 +23,12 @@ import java.util.*
  * mail: AndyyYang2014@126.com.
  */
 class CategoryFragment : BaseFragment() {
-    lateinit var recyclerView: XRecyclerView
+
     lateinit var adapter: CategoryAdapter
-    val categoryPresenter by lazy { CategoryPresenter(this) }
+    private val categoryPresenter by lazy { CategoryPresenter(this) }
 
-    override fun initFragment(view: View, savedInstanceState: Bundle?) {
-        recyclerView = rootView.findViewById(R.id.list_content)
-
-        val gridLayoutManager = GridLayoutManager(activity, 2)
+    override fun initFragment(savedInstanceState: Bundle?) {
+        val gridLayoutManager = GridLayoutManager(mActivity, 2)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 if (gridLayoutManager.itemCount - 1 == position) {
@@ -38,39 +36,34 @@ class CategoryFragment : BaseFragment() {
                 }
                 return 1
             }
+        }
+        adapter = CategoryAdapter()
+        with(list_content) {
+            layoutManager = gridLayoutManager
+            overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            adapter = this@CategoryFragment.adapter
+            setLoadingMoreEnabled(false)
+            setPullRefreshEnabled(false)
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+                    val position = parent.getChildPosition(view)
+                    val offset = C.dip2px(2f)!!
+
+                    outRect.set(if (position % 2 == 0) 0 else offset, offset,
+                            if (position % 2 == 0) offset else 0, offset)
+                }
+            })
 
         }
-        recyclerView.layoutManager = gridLayoutManager
-        recyclerView.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        adapter = CategoryAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.setLoadingMoreEnabled(false)
-        recyclerView.setPullRefreshEnabled(false)
-        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
-                val position = parent.getChildPosition(view)
-                val offset = C.dip2px(2f)!!
-
-                outRect.set(if (position % 2 == 0) 0 else offset, offset,
-                        if (position % 2 == 0) offset else 0, offset)
-            }
-
-        })
-        adapter.onClick = { activity.toActivityWithParcelable<CategoryDetailActivity>(it) }
+        adapter.onClick = { mActivity.toActivityWithParcelable<CategoryDetailActivity>(it) }
         categoryPresenter.requestData()
-
     }
 
-    override fun getFragmentLayoutId(): Int {
-        return R.layout.layout_list
-    }
+    override fun getFragmentLayoutId() = R.layout.layout_list
 
-    fun showCategory(categorys: ArrayList<Category>) {
-        adapter.setData(categorys)
-    }
+    fun showCategory(categorys: ArrayList<Category>) = adapter.setData(categorys)
 
     var isFirst = true
-
 
     override fun onResume() {
         super.onResume()
@@ -85,9 +78,9 @@ class CategoryFragment : BaseFragment() {
 //            return true
 //        }
 //        super.setupToolbar()
-        activity.toolbar.setBackgroundColor(0xddffffff.toInt())
-        activity.iv_search.setImageResource(R.drawable.ic_action_search)
-        activity.tv_bar_title.text = "分类"
+        mActivity.toolbar.setBackgroundColor(0xddffffff.toInt())
+        mActivity.iv_search.setImageResource(R.drawable.ic_action_search)
+        mActivity.tv_bar_title.text = "分类"
         return true
     }
 

@@ -1,12 +1,9 @@
 package com.andyyang.eyepetizer.ui.fragment
 
-import android.content.ContentValues.TAG
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
-import android.view.View
 import com.andyyang.eyepetizer.R
 import com.andyyang.eyepetizer.modle.bean.HomeBean
 import com.andyyang.eyepetizer.modle.bean.Item
@@ -28,65 +25,57 @@ import java.util.*
  * mail: AndyyYang2014@126.com.
  */
 class HomeFragment : BaseFragment() {
-    val simpleDateFormat by lazy { SimpleDateFormat("- MMM. dd, 'Brunch' -", Locale.ENGLISH) }
 
-    lateinit var homeAdapter: HomeAdapter
+    private val simpleDateFormat by lazy { SimpleDateFormat("- MMM. dd, 'Brunch' -", Locale.ENGLISH) }
+    private lateinit var homeAdapter: HomeAdapter
     val presenter by lazy { HomePresenter(this) }
     var loadingMore = false
 
-
-    override fun initFragment(view: View, savedInstanceState: Bundle?) {
-//        initView(view)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initFragment(savedInstanceState: Bundle?) {
         initView()
         presenter.requestFirstData()
     }
 
-    override fun getFragmentLayoutId(): Int {
-        return R.layout.fragment_home
-    }
+    override fun getFragmentLayoutId() = R.layout.fragment_home
 
     private fun initView() {
-
-        activity.tv_bar_title?.typeface = Typeface.createFromAsset(activity.assets, "fonts/Lobster-1.4.otf")
-        val paint = activity.tv_bar_title.paint
+        mActivity.tv_bar_title?.typeface = Typeface.createFromAsset(mActivity.assets, "fonts/Lobster-1.4.otf")
+        val paint = mActivity.tv_bar_title.paint
         paint.isFakeBoldText = true
 
         homeAdapter = HomeAdapter()
-        home_rv.adapter = homeAdapter
-        home_rv.layoutManager = LinearLayoutManager(activity)
-        home_rv.onRefresh = {
-            presenter.requestFirstData()
-        }
-
-        home_rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    val childCount = home_rv.childCount
-                    val itemCount = home_rv.layoutManager.itemCount
-                    val firstVisibleItem = (home_rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    if (firstVisibleItem + childCount == itemCount) {
-                        Log.d(TAG, "到底了")
-                        if (!loadingMore) {
-                            loadingMore = true
-                            onLoadMore()
+        with(home_rv) {
+            adapter = homeAdapter
+            layoutManager = LinearLayoutManager(activity)
+            onRefresh = {
+                presenter.requestFirstData()
+            }
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        val childCount = home_rv.childCount
+                        val itemCount = home_rv.layoutManager.itemCount
+                        val firstVisibleItem = (home_rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        if (firstVisibleItem + childCount == itemCount) {
+                            if (!loadingMore) {
+                                loadingMore = true
+                                onLoadMore()
+                            }
                         }
                     }
                 }
-            }
 
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                setupToolbar()
-            }
-        })
+                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    setupToolbar()
+                }
+            })
+        }
+
     }
 
-    val linearLayoutManager by lazy {
+    private val linearLayoutManager by lazy {
         home_rv.layoutManager as LinearLayoutManager
     }
 
@@ -99,21 +88,21 @@ class HomeFragment : BaseFragment() {
 //        }
         val findFirstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
         if (findFirstVisibleItemPosition == 0) {//设置为透明
-            activity.toolbar.setBackgroundColor(0x00000000)
-            activity.iv_search.setImageResource(R.drawable.ic_action_search_white)
-            activity.tv_bar_title.text = ""
+            mActivity.toolbar.setBackgroundColor(0x00000000)
+            mActivity.iv_search.setImageResource(R.drawable.ic_action_search_white)
+            mActivity.tv_bar_title.text = ""
 
         } else {
             if (homeAdapter.itemList.size > 1) {
 
-                activity.toolbar.setBackgroundColor(0xddffffff.toInt())
-                activity.iv_search.setImageResource(R.drawable.ic_action_search)
+                mActivity.toolbar.setBackgroundColor(0xddffffff.toInt())
+                mActivity.iv_search.setImageResource(R.drawable.ic_action_search)
                 val itemList = homeAdapter.itemList
                 val item = itemList[findFirstVisibleItemPosition + homeAdapter.bannerItemListCount - 1]
                 if (item.type == "textHeader") {
-                    activity.tv_bar_title.text = item.data?.text
+                    mActivity.tv_bar_title.text = item.data?.text
                 } else {
-                    activity.tv_bar_title.text = simpleDateFormat.format(item.data?.date)
+                    mActivity.tv_bar_title.text = simpleDateFormat.format(item.data?.date)
                 }
             }
 
@@ -121,10 +110,7 @@ class HomeFragment : BaseFragment() {
         return true
     }
 
-    fun onLoadMore() {
-        presenter.requestMoreData()
-    }
-
+    fun onLoadMore() = presenter.requestMoreData()
 
     fun setMoreData(itemList: ArrayList<Item>) {
         loadingMore = false
@@ -137,9 +123,7 @@ class HomeFragment : BaseFragment() {
         home_rv.hideLoading()
     }
 
-    fun onError() {
-        home_rv.hideLoading()
-    }
+    fun onError() = home_rv.hideLoading()
 
     override fun onResume() {
         super.onResume()

@@ -12,17 +12,13 @@ import com.andyyang.eyepetizer.ui.base.BaseAdapter.BaseViewHolder
 
 abstract class BaseAdapter<in T : BaseViewHolder> : RecyclerView.Adapter<BaseViewHolder>() {
 
-    private var listener: OnItemClickListener? = null
-    private var Longlistener: OnLongClickListener? = null
-
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        val index = position
-        holder.view.setOnClickListener { v ->
-            listener?.let { listener!!.onItemClick(v, index) }
+        holder.view.setOnClickListener {
+            onItemClick?.invoke(position)
 
         }
-        holder.view.setOnLongClickListener { v ->
-            Longlistener?.let { Longlistener!!.onLongItemClick(v, index) }
+        holder.view.setOnLongClickListener {
+            onLongItemClick?.invoke(position)
             true
         }
 
@@ -31,21 +27,9 @@ abstract class BaseAdapter<in T : BaseViewHolder> : RecyclerView.Adapter<BaseVie
 
     protected abstract fun onBindView(viewHolder: T, position: Int)
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
-    }
+    var onItemClick: ((Int) -> Unit)? = null
 
-    fun setOnLongClickListener(listener: OnLongClickListener) {
-        this.Longlistener = listener
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(v: View, position: Int)
-    }
-
-    interface OnLongClickListener {
-        fun onLongItemClick(v: View, position: Int)
-    }
+    var onLongItemClick: ((Int) -> Unit)? = null
 
     open class BaseViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 

@@ -17,10 +17,9 @@ import io.reactivex.disposables.Disposable
  */
 class DetailPresenter(view: DetailActivity) : BasePresenter<DetailActivity>(view) {
 
-    var moreReatedUrl: String? = ""
-    var moreReplyUrl: String? = ""
-
-    val detailModel: DetailModel by lazy {
+    private var moreReatedUrl: String? = ""
+    private var moreReplyUrl: String? = ""
+    private val detailModel: DetailModel by lazy {
         DetailModel()
     }
 
@@ -63,7 +62,7 @@ class DetailPresenter(view: DetailActivity) : BasePresenter<DetailActivity>(view
         return requestRelatedData(itemData.data!!.id)
     }
 
-    fun requestRelatedData(id: Long): Disposable? {
+   private fun requestRelatedData(id: Long): Disposable? {
         return detailModel.loadRelatedData(id)
                 .subscribe({ view.setRelated(it.itemList) })
     }

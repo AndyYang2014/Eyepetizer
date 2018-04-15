@@ -20,7 +20,7 @@ class HotCategoryPresenter(view: HotDetailFragment) : BasePresenter<HotDetailFra
                 })
     }
 
-    val hotModel: HotModel by lazy {
+    private val hotModel: HotModel by lazy {
         HotModel()
     }
 

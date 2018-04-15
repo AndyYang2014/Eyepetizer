@@ -11,7 +11,7 @@ import com.andyyang.eyepetizer.ui.fragment.CategoryFragment
  */
 class CategoryPresenter(view: CategoryFragment) : BasePresenter<CategoryFragment>(view) {
 
-    val categoryModel: CategoryModel by lazy {
+    private val categoryModel: CategoryModel by lazy {
         CategoryModel()
     }
 

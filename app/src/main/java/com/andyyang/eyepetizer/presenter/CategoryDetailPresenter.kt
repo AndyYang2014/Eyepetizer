@@ -38,7 +38,7 @@ class CategoryDetailPresenter(view: CategoryDetailActivity) : BasePresenter<Cate
     }
 
 
-    val categoryDetailModel: CategoryDetailModel by lazy {
+   private val categoryDetailModel: CategoryDetailModel by lazy {
         CategoryDetailModel()
     }
 

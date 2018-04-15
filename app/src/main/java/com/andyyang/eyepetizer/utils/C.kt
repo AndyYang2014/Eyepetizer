@@ -12,8 +12,6 @@ import com.andyyang.eyepetizer.App
  * mail: AndyyYang2014@126.com.
  */
 object C {
-    lateinit var threadPool: UThread.TreadPool
-    lateinit var mainHandler: Handler
     lateinit var app: App
         private set
 
@@ -21,26 +19,20 @@ object C {
     private var screenWidth: Int? = null
     private var screenHeight: Int? = null
     private var screenDpi: Int? = null
+    private val STANDARD_WIDTH = 1080
+    private val STANDARD_HEIGHT = 1920
 
     fun init(application: App) {
         app = application
-        threadPool = UThread.Pool()
-        mainHandler = Handler(Looper.getMainLooper())
-
         displayMetrics = application.resources.displayMetrics
         screenWidth = displayMetrics?.widthPixels
         screenHeight = displayMetrics?.heightPixels
         screenDpi = displayMetrics?.densityDpi
     }
 
-
     fun getContext(): Context {
         return app.applicationContext
     }
-
-
-    private val STANDARD_WIDTH = 1080
-    private val STANDARD_HEIGHT = 1920
 
     fun getScreenWidth(): Int? {
         return screenWidth

@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.andyyang.eyepetizer.R
+import com.andyyang.eyepetizer.displayUrl
 import com.andyyang.eyepetizer.interfaces.onBitmapSavedListener
 import com.andyyang.eyepetizer.showToast
 import com.andyyang.eyepetizer.ui.base.BaseActivity
 import com.andyyang.eyepetizer.utils.Logger
-import com.andyyang.eyepetizer.utils.glide.ImageLoader
+import com.andyyang.eyepetizer.utils.ImageLoader
 import kotlinx.android.synthetic.main.activity_bigimg.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 
 /**
@@ -21,45 +23,46 @@ import kotlinx.android.synthetic.main.activity_bigimg.*
 
 class BigImageActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bigimg)
-        init()
-    }
+    override fun getActivityLayoutId() = R.layout.activity_bigimg
 
-    private fun init() {
-        ImageLoader.load(this, intent.getStringExtra("imgUrl"), bigimg_content)
-        bigimg_content.setOnClickListener {
-            if (bigimg_btn_save.visibility == View.GONE) {
-                bigimg_btn_save.visibility = View.VISIBLE
-            } else {
-                bigimg_btn_save.visibility = View.GONE
+    override fun initActivity(savedInstanceState: Bundle?) {
+        with(bigimg_content) {
+            displayUrl(intent.getStringExtra("imgUrl"))
+            onClick {
+                if (bigimg_btn_save.visibility == View.GONE) {
+                    bigimg_btn_save.visibility = View.VISIBLE
+                } else {
+                    bigimg_btn_save.visibility = View.GONE
+                }
             }
         }
 
-        bigimg_btn_save.setOnClickListener {
-            bigimg_btn_save.isEnabled = false
-            val drawingCache = bigimg_content.drawingCache
-            ImageLoader.saveBitmap2Store(this@BigImageActivity, drawingCache, object : onBitmapSavedListener {
-                override fun onSuccess() {
-                    showToast("图片已保存至本地")
-                    bigimg_btn_save.visibility = View.GONE
-                    bigimg_btn_save.isEnabled = true
-                }
+        with(bigimg_btn_save) {
+            onClick {
+                this@with.isEnabled = false
+                bigimg_content.isDrawingCacheEnabled = true
+                bigimg_content.buildDrawingCache()
+                val drawingCache = bigimg_content.drawingCache
+                ImageLoader.saveBitmap2Store(this@BigImageActivity, drawingCache, object : onBitmapSavedListener {
+                    override fun onSuccess() {
+                        showToast("图片已保存至本地")
+                        this@with.visibility = View.GONE
+                        this@with.isEnabled = true
+                        bigimg_content.destroyDrawingCache()
+                    }
 
-                override fun onFaiure(e: Exception) {
-                    Logger.e(e.toString())
-                    showToast(e.toString())
-                    bigimg_btn_save.isEnabled = true
-                }
-            })
+                    override fun onFaiure(e: Exception) {
+                        Logger.e(e.toString())
+                        showToast(e.toString())
+                        this@with.isEnabled = true
+                        bigimg_content.destroyDrawingCache()
+                    }
+                })
+            }
         }
     }
 
-    override fun noStatusBar(): Boolean {
-        return true
-    }
-
+    override fun noStatusBar() = true
 
     companion object {
         fun getStartIntent(context: Context, imgUrl: String): Intent {
