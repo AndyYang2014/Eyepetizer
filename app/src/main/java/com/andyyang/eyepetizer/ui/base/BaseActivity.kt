@@ -98,11 +98,11 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
     }
 
     override fun onBackPressed() {
-        if (activities.size == 1) {
-            moveTaskToBack(true)
-        } else {
-            super.onBackPressed()
-        }
+        super.onBackPressed()
+//        if (activities.size == 1) {
+//            moveTaskToBack(true)
+//        } else {
+//        }
     }
 
     protected open fun noStatusBar(): Boolean {
