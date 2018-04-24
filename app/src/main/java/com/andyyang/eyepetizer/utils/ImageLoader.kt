@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
-import com.andyyang.eyepetizer.interfaces.onBitmapSavedListener
 import com.bumptech.glide.Glide
 import java.io.File
 import java.io.FileOutputStream
@@ -38,7 +37,7 @@ object ImageLoader {
                 .into(view)
     }
 
-    fun saveBitmap2Store(context: Context, bitmap: Bitmap, listener: onBitmapSavedListener) {
+    fun saveBitmap2Store(context: Context, bitmap: Bitmap, onSuccess: (() -> Unit) = {}, onError: ((String?) -> Unit) = {}) {
         try {
             val appDir = File(Environment.getExternalStorageDirectory(), "Eyepetizer")
             if (!appDir.exists()) {
@@ -52,9 +51,9 @@ object ImageLoader {
             fos.close()
             MediaStore.Images.Media.insertImage(context.contentResolver, file.absolutePath, fileName, null)
             context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)))
-            listener.onSuccess()
+            onSuccess.invoke()
         } catch (e: Exception) {
-            listener.onFaiure(e)
+            onError.invoke(e.message)
             e.printStackTrace()
         }
 

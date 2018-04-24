@@ -4,14 +4,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <com.andyyang.eyepetizer.ui.view.hot.ImageView
+    <com.andyyang.eyepetizer.ui.view.hot.CacheImageView
         android:id="@+id/bigimg_content"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
 
-    <com.andyyang.eyepetizer.ui.view.hot.ImageView
+    <com.andyyang.eyepetizer.ui.view.hot.CacheImageView
         android:id="@+id/bigimg_btn_save"
         android:layout_gravity="bottom|right"
         android:layout_width="40dp"

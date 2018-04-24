@@ -41,27 +41,27 @@ abstract class BaseFragment : Fragment(), LifeCycle {
 
     override fun onStart() {
         super.onStart()
-        lifeCycleListener?.let { lifeCycleListener!!.onStart() }
+        lifeCycleListener?.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        lifeCycleListener?.let { lifeCycleListener!!.onResume() }
+        lifeCycleListener?.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        lifeCycleListener?.let { lifeCycleListener!!.onPause() }
+        lifeCycleListener?.onPause()
     }
 
     override fun onStop() {
         super.onStop()
-        lifeCycleListener?.let { lifeCycleListener!!.onStop() }
+        lifeCycleListener?.onStop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        lifeCycleListener?.let { lifeCycleListener!!.onDestroy() }
+        lifeCycleListener?.onDestroy()
     }
 
 

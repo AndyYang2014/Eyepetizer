@@ -3,8 +3,10 @@ package com.andyyang.eyepetizer.ui.base
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
+import android.widget.Toast
 import com.andyyang.eyepetizer.interfaces.LifeCycle
 import com.andyyang.eyepetizer.interfaces.OnLifeCycleListener
+import com.andyyang.eyepetizer.showToast
 
 /**
  * Created by AndyYang
@@ -16,6 +18,8 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
 
     private val activities = ArrayList<BaseActivity>()
     private var lifeCycleListener: OnLifeCycleListener? = null
+    private var mExitTime: Long = 0
+    private var toast: Toast? = null
 
     override fun setOnLifeCycleListener(lifeCycleListener: OnLifeCycleListener) {
         this.lifeCycleListener = lifeCycleListener
@@ -26,7 +30,7 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
         setContentView(getActivityLayoutId())
 
         if (noActionBar()) {
-            supportActionBar!!.hide()
+            supportActionBar?.hide()
         }
 
         if (noStatusBar()) {
@@ -47,27 +51,27 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
 
     override fun onStart() {
         super.onStart()
-        lifeCycleListener?.let { lifeCycleListener!!.onStart() }
+        lifeCycleListener?.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        lifeCycleListener?.let { lifeCycleListener!!.onResume() }
+        lifeCycleListener?.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        lifeCycleListener?.let { lifeCycleListener!!.onPause() }
+        lifeCycleListener?.onPause()
     }
 
     override fun onStop() {
         super.onStop()
-        lifeCycleListener?.let { lifeCycleListener!!.onStop() }
+        lifeCycleListener?.onStop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        lifeCycleListener?.let { lifeCycleListener!!.onDestroy() }
+        lifeCycleListener?.onDestroy()
         activities.remove(this)
     }
 
@@ -98,11 +102,17 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-//        if (activities.size == 1) {
-//            moveTaskToBack(true)
-//        } else {
-//        }
+        if (activities.size == 1) {
+            if (System.currentTimeMillis().minus(mExitTime) <= 3000) {
+                finish()
+                toast!!.cancel()
+            } else {
+                mExitTime = System.currentTimeMillis()
+                toast = showToast("再按一次退出程序")
+            }
+        } else {
+            super.onBackPressed()
+        }
     }
 
     protected open fun noStatusBar(): Boolean {

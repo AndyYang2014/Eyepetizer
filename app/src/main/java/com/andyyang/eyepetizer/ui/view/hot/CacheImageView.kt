@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 
-class ImageView : AppCompatImageView {
+class CacheImageView : AppCompatImageView {
 
 
     constructor(context: Context) : super(context) {
