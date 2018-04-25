@@ -1,7 +1,9 @@
 package com.andyyang.eyepetizer.ui.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import com.andyyang.eyepetizer.R
+import com.andyyang.eyepetizer.showToast
 import com.andyyang.eyepetizer.ui.base.BaseActivity
 import com.andyyang.eyepetizer.ui.fragment.CategoryFragment
 import com.andyyang.eyepetizer.ui.fragment.GirlsFragment
@@ -17,6 +19,9 @@ import kotlinx.android.synthetic.main.activity_main.*
  * mail: AndyyYang2014@126.com.
  */
 class MainActivity : BaseActivity() {
+
+    private var mExitTime: Long = 0
+    private var toast: Toast? = null
 
     override fun getActivityLayoutId() = R.layout.activity_main
 
@@ -67,5 +72,15 @@ class MainActivity : BaseActivity() {
         val transaction = fm.beginTransaction()
         transaction.replace(R.id.main_layFrame, HomeFragment())
         transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis().minus(mExitTime) <= 3000) {
+            finish()
+            toast!!.cancel()
+        } else {
+            mExitTime = System.currentTimeMillis()
+            toast = showToast("再按一次退出程序")
+        }
     }
 }

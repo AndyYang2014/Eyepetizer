@@ -1,10 +1,11 @@
 package com.andyyang.eyepetizer.ui.activity
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
+import android.os.SystemClock
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import com.andyyang.eyepetizer.R
@@ -17,8 +18,10 @@ import com.andyyang.eyepetizer.ui.base.BaseActivity
 import com.andyyang.eyepetizer.utils.FileUtils
 import com.andyyang.eyepetizer.utils.PermissionHelper
 import kotlinx.android.synthetic.main.activity_splash.*
+import org.jetbrains.anko.doAsync
 import zlc.season.rxdownload2.RxDownload
 import java.io.File
+
 
 /**
  * Created by AndyYang.
@@ -55,8 +58,8 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun setAnimation() {
-        val scaleAnimation = ScaleAnimation(0.5f, 1.0f, 0.5f, 1.0f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f)
-        scaleAnimation.duration = 1500
+        val scaleAnimation = ScaleAnimation(1.0f, 1.2f, 1.0f, 1.2f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f, ScaleAnimation.RELATIVE_TO_SELF, 0.5f)
+        scaleAnimation.duration = 2000
         splash_bg.startAnimation(scaleAnimation)
         scaleAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {
@@ -79,20 +82,14 @@ class SplashActivity : BaseActivity() {
         if (!appDir!!.exists()) {
             appDir!!.mkdirs()
         }
-//        val filesInDir = FileUtils.listFilesInDir(appDir!!.absolutePath)
-//        filesInDir.forEach {
-//            Log.e("file", "file://" + it)
-//
-//        }
+
         val cachefile = File(appDir, "cache.txt")
         if (cachefile.exists()) {
             isCache = true
             val path = FileUtils.readFile2String(cachefile, "UTF-8")
-            Log.e("file", "file://" + appDir!!.absolutePath + File.separator + path)
-
-            splash_bg.displayUrl("file://" + appDir!!.absolutePath + File.separator + path.trim())
+            val bitmap = BitmapFactory.decodeFile(appDir!!.absolutePath + File.separator + path.trim())
+            splash_bg.setImageBitmap(bitmap)
             setAnimation()
-            FileUtils.deleteFilesInDir(appDir)
         }
     }
 
@@ -100,16 +97,27 @@ class SplashActivity : BaseActivity() {
     private fun setSplashBg(result: GankInfo.Result) {
         if (!isCache) {
             splash_bg.displayUrl(result.url)
+            doAsync {
+                SystemClock.sleep(2000)
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                finish()
+            }
         }
 
         val type = result.url.split(".")
         val savename = result._id + "." + type[type.size - 1]
-
+        val downloadfile = File(appDir, savename)
+        if (downloadfile.exists()) {
+            downloadfile.delete()
+        }
         RxDownload.getInstance()
                 .download(result.url, savename, appDir!!.absolutePath)
                 .io_main()
                 .subscribe({}, {}, {
                     val cachefile = File(appDir, "cache.txt")
+                    if (cachefile.exists()) {
+                        cachefile.delete()
+                    }
                     FileUtils.writeFileFromString(cachefile, savename, true)
                 })
     }
