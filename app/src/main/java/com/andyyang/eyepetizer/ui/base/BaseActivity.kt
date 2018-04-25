@@ -44,30 +44,29 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
 
     abstract fun getActivityLayoutId(): Int
 
-
     override fun onStart() {
         super.onStart()
-        lifeCycleListener?.let { lifeCycleListener!!.onStart() }
+        lifeCycleListener?.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        lifeCycleListener?.let { lifeCycleListener!!.onResume() }
+        lifeCycleListener?.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        lifeCycleListener?.let { lifeCycleListener!!.onPause() }
+        lifeCycleListener?.onPause()
     }
 
     override fun onStop() {
         super.onStop()
-        lifeCycleListener?.let { lifeCycleListener!!.onStop() }
+        lifeCycleListener?.onStop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        lifeCycleListener?.let { lifeCycleListener!!.onDestroy() }
+        lifeCycleListener?.onDestroy()
         activities.remove(this)
     }
 
@@ -80,9 +79,8 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
     }
 
     fun finishAllActivityAbord(vararg activityClasses: Class<out BaseActivity>) {
-        for (activity in activities) {
-            activityClasses
-                    .filter { activity.javaClass != it }
+        activities.forEach { activity ->
+            activityClasses.filter { activity.javaClass != it }
                     .forEach { activity.finish() }
         }
     }
@@ -92,17 +90,9 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
     }
 
     fun finishAllActivity() {
-        for (activity in activities) {
-            activity.finish()
+        activities.forEach {
+            it.finish()
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-//        if (activities.size == 1) {
-//            moveTaskToBack(true)
-//        } else {
-//        }
     }
 
     protected open fun noStatusBar(): Boolean {
