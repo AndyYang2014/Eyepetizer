@@ -63,7 +63,7 @@ class CategoryFragment : BaseFragment() {
 
     fun showCategory(categorys: ArrayList<Category>) = adapter.setData(categorys)
 
-    var isFirst = true
+    private var isFirst = true
 
     override fun onResume() {
         super.onResume()

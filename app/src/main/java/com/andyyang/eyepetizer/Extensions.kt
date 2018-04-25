@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.andyyang.eyepetizer.utils.ImageLoader
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.io.Serializable
@@ -34,6 +35,11 @@ fun Fragment.showToast(content: String): Toast {
 }
 
 fun <T> Flowable<T>.io_main(): Flowable<T> {
+    return subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+}
+
+fun <T> Observable<T>.io_main(): Observable<T> {
     return subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 }

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import com.andyyang.eyepetizer.R
 import com.andyyang.eyepetizer.displayUrl
-import com.andyyang.eyepetizer.interfaces.onBitmapSavedListener
 import com.andyyang.eyepetizer.showToast
 import com.andyyang.eyepetizer.ui.base.BaseActivity
 import com.andyyang.eyepetizer.utils.Logger
@@ -43,21 +42,19 @@ class BigImageActivity : BaseActivity() {
                 bigimg_content.isDrawingCacheEnabled = true
                 bigimg_content.buildDrawingCache()
                 val drawingCache = bigimg_content.drawingCache
-                ImageLoader.saveBitmap2Store(this@BigImageActivity, drawingCache, object : onBitmapSavedListener {
-                    override fun onSuccess() {
-                        showToast("图片已保存至本地")
-                        this@with.visibility = View.GONE
-                        this@with.isEnabled = true
-                        bigimg_content.destroyDrawingCache()
-                    }
+                ImageLoader.saveBitmap2Store(this@BigImageActivity, drawingCache,
+                        onSuccess = {
+                            showToast("图片已保存至本地")
+                            this@with.visibility = View.GONE
+                            this@with.isEnabled = true
+                            bigimg_content.destroyDrawingCache()
+                        },
+                        onError = {
+                            showToast(it.toString())
+                            this@with.isEnabled = true
+                            bigimg_content.destroyDrawingCache()
+                        })
 
-                    override fun onFaiure(e: Exception) {
-                        Logger.e(e.toString())
-                        showToast(e.toString())
-                        this@with.isEnabled = true
-                        bigimg_content.destroyDrawingCache()
-                    }
-                })
             }
         }
     }

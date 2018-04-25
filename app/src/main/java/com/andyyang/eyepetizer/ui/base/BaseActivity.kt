@@ -3,8 +3,10 @@ package com.andyyang.eyepetizer.ui.base
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
+import android.widget.Toast
 import com.andyyang.eyepetizer.interfaces.LifeCycle
 import com.andyyang.eyepetizer.interfaces.OnLifeCycleListener
+import com.andyyang.eyepetizer.showToast
 
 /**
  * Created by AndyYang
@@ -26,7 +28,7 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
         setContentView(getActivityLayoutId())
 
         if (noActionBar()) {
-            supportActionBar!!.hide()
+            supportActionBar?.hide()
         }
 
         if (noStatusBar()) {
