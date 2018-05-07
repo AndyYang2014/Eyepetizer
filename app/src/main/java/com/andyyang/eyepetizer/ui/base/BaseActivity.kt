@@ -1,5 +1,6 @@
 package com.andyyang.eyepetizer.ui.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
@@ -7,6 +8,7 @@ import android.widget.Toast
 import com.andyyang.eyepetizer.interfaces.LifeCycle
 import com.andyyang.eyepetizer.interfaces.OnLifeCycleListener
 import com.andyyang.eyepetizer.showToast
+import com.andyyang.eyepetizer.utils.PermissionHelper
 
 /**
  * Created by AndyYang
@@ -18,6 +20,7 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
 
     private val activities = ArrayList<BaseActivity>()
     private var lifeCycleListener: OnLifeCycleListener? = null
+    private var mPermissionHelper: PermissionHelper? = null
 
     override fun setOnLifeCycleListener(lifeCycleListener: OnLifeCycleListener) {
         this.lifeCycleListener = lifeCycleListener
@@ -45,6 +48,23 @@ abstract class BaseActivity : AppCompatActivity(), LifeCycle {
     abstract fun initActivity(savedInstanceState: Bundle?)
 
     abstract fun getActivityLayoutId(): Int
+
+    fun RequestPermissions(models: Array<PermissionHelper.PermissionModel>, onApply: (() -> Unit)) {
+        mPermissionHelper = PermissionHelper(this)
+        mPermissionHelper!!.onApplyPermission = {
+            onApply.invoke()
+        }
+        mPermissionHelper!!.requestPermissions(models)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        mPermissionHelper?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mPermissionHelper?.onActivityResult(requestCode, resultCode, data)
+    }
 
     override fun onStart() {
         super.onStart()

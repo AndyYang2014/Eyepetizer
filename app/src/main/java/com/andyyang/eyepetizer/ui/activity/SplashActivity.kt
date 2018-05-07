@@ -1,24 +1,20 @@
 package com.andyyang.eyepetizer.ui.activity
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.SystemClock
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import com.andyyang.eyepetizer.R
-import com.andyyang.eyepetizer.displayUrl
 import com.andyyang.eyepetizer.io_main
 import com.andyyang.eyepetizer.modle.bean.GankInfo
 import com.andyyang.eyepetizer.net.NetWork
-import com.andyyang.eyepetizer.showToast
 import com.andyyang.eyepetizer.ui.base.BaseActivity
 import com.andyyang.eyepetizer.utils.FileUtils
 import com.andyyang.eyepetizer.utils.PermissionHelper
 import kotlinx.android.synthetic.main.activity_splash.*
-import org.jetbrains.anko.doAsync
 import zlc.season.rxdownload2.RxDownload
 import java.io.File
 
@@ -31,30 +27,26 @@ import java.io.File
 
 class SplashActivity : BaseActivity() {
 
-    lateinit private var mPermissionHelper: PermissionHelper
     private var appDir: File? = null
     private var isCache: Boolean = false
+    private val permissionModels by lazy {
+        arrayOf(
+                PermissionHelper.PermissionModel("存储空间", Manifest.permission.WRITE_EXTERNAL_STORAGE, "我们需要您允许我们读写你的存储卡，以方便我们临时保存一些数据", WRITE_EXTERNAL_STORAGE_CODE)
+        )
+    }
 
     override fun getActivityLayoutId() = R.layout.activity_splash
 
     override fun initActivity(savedInstanceState: Bundle?) {
-        mPermissionHelper = PermissionHelper(this)
-        mPermissionHelper.setOnApplyPermissionListener { runApp() }
-        if (Build.VERSION.SDK_INT < 23) {
+        RequestPermissions(permissionModels, onApply = {
             runApp()
-        } else {
-            if (mPermissionHelper.isAllRequestedPermissionGranted) {
-                runApp()
-            } else {
-                mPermissionHelper.applyPermissions()
-            }
-        }
+        })
     }
 
     private fun runApp() {
         initFile()
         NetWork.api.randomGirl(1).io_main().
-                subscribe({ setSplashBg(it.results[0]) }, { showToast("网络请求失败") })
+                subscribe({ download(it.results[0]) }, { })
     }
 
     private fun setAnimation() {
@@ -87,23 +79,26 @@ class SplashActivity : BaseActivity() {
         if (cachefile.exists()) {
             isCache = true
             val path = FileUtils.readFile2String(cachefile, "UTF-8")
-            val bitmap = BitmapFactory.decodeFile(appDir!!.absolutePath + File.separator + path.trim())
-            splash_bg.setImageBitmap(bitmap)
-            setAnimation()
+            val imgpath = File(appDir!!.absolutePath + File.separator, path)
+            if (imgpath.exists()) {
+                val bitmap = BitmapFactory.decodeFile(appDir!!.absolutePath + File.separator + path.trim())
+                splash_bg.setImageBitmap(bitmap)
+                setAnimation()
+            } else {
+                showDefaultImg()
+            }
+        } else {
+            showDefaultImg()
         }
     }
 
+    private fun showDefaultImg() {
+        splash_bg.setImageResource(R.drawable.splash_default)
+        setAnimation()
+    }
 
-    private fun setSplashBg(result: GankInfo.Result) {
-        if (!isCache) {
-            splash_bg.displayUrl(result.url)
-            doAsync {
-                SystemClock.sleep(2000)
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                finish()
-            }
-        }
 
+    private fun download(result: GankInfo.Result) {
         val type = result.url.split(".")
         val savename = result._id + "." + type[type.size - 1]
         val downloadfile = File(appDir, savename)
@@ -124,14 +119,8 @@ class SplashActivity : BaseActivity() {
 
     override fun noStatusBar() = true
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        mPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        mPermissionHelper.onActivityResult(requestCode, resultCode, data)
+    companion object {
+        val WRITE_EXTERNAL_STORAGE_CODE = 101
     }
 
 }
