@@ -10,11 +10,9 @@ import android.view.animation.ScaleAnimation
 import com.andyyang.eyepetizer.R
 import com.andyyang.eyepetizer.io_main
 import com.andyyang.eyepetizer.modle.bean.GankInfo
-import com.andyyang.eyepetizer.net.NetWork
 import com.andyyang.eyepetizer.ui.base.BaseActivity
 import com.andyyang.eyepetizer.utils.FileUtils
 import com.andyyang.eyepetizer.utils.PermissionHelper
-import kotlinx.android.synthetic.main.activity_splash.*
 import zlc.season.rxdownload2.RxDownload
 import java.io.File
 

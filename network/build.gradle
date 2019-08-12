@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion build_version.compileSdkVersion
+
+    defaultConfig {
+
+        minSdkVersion build_version.minSdkVersion
+        targetSdkVersion build_version.targetSdkVersion
+        versionCode build_version.versionCode
+        versionName build_version.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'java.lang.String', 'GANK_BASE_URL', '"http://gank.io/api/"'
+        buildConfigField 'java.lang.String', 'KAIYAN_BASE_URL', '"http://baobab.kaiyanapp.com/api/"'
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //test
+    testImplementation libs.junit
+    androidTestImplementation libs.espresso_core
+    androidTestImplementation libs.espresso_test_runner
+
+    //kt
+    api libs.kotlin_stdlib
+    api libs.kotlin_coroutines
+
+    // okhttp
+    api libs.okhttp
+    api libs.okhttp_logging
+    api libs.okhttp_urlconnection
+
+    // retrofit
+    api libs.retrofit
+    api libs.retrofit_gson
+    api libs.retrofit_rxjava
+
+    api project(path: ':common')
+}

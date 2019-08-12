@@ -1,8 +1,5 @@
 package com.andyyang.eyepetizer.presenter
 
-import com.andyyang.eyepetizer.io_main
-import com.andyyang.eyepetizer.net.NetWork
-import com.andyyang.eyepetizer.showToast
 import com.andyyang.eyepetizer.ui.base.BasePresenter
 import com.andyyang.eyepetizer.ui.fragment.GirlsFragment
 

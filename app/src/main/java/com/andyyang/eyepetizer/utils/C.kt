@@ -68,15 +68,4 @@ object C {
         return (dipValue * scale!! + 0.5f).toInt()
     }
 
-    interface Url {
-        companion object {
-
-            const val base_url: String = "http://baobab.kaiyanapp.com/api/"
-
-            const val RANDOM = "http://gank.io/api/random/data/福利"
-
-            const val GIRL = "http://gank.io/api/data/福利"
-
-        }
-    }
 }

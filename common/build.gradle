@@ -1,0 +1,99 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+
+    compileSdkVersion build_version.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion build_version.minSdkVersion
+        targetSdkVersion build_version.targetSdkVersion
+        versionCode build_version.versionCode
+        versionName build_version.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //test
+    testImplementation libs.junit
+    androidTestImplementation libs.espresso_core
+    androidTestImplementation libs.espresso_test_runner
+
+    api libs.appcompat
+    api libs.design
+    api libs.recyclerview
+    api libs.cardview
+    api libs.constraint
+
+    // arrow
+    api libs.arrow
+
+    // rx
+    api libs.rxkotlin
+    api libs.rxandroid
+
+    //glide
+    api libs.glide
+    kapt libs.glide_compiler
+
+    // kodein
+    api libs.kodein
+    api libs.kodein_android
+    api libs.kodein_androidx
+
+    // autodispose
+    api libs.autodispose
+    api libs.autodispose_ktx
+    api libs.autodispose_android_ktx
+    api libs.autodispose_archs_ktx
+
+    api libs.jetpack_lifecycle_extensions
+    api libs.jetpack_lifecycle_extensions
+    api libs.jetpack_lifecycle_java8
+    annotationProcessor libs.jetpack_lifecycle_compiler
+    api libs.jetpack_viewmodel
+    api libs.jetpack_livedata
+    api libs.jetpack_livedata_rx
+
+    kapt libs.databinding
+}

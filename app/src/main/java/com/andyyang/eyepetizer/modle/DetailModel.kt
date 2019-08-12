@@ -1,8 +1,6 @@
 package com.andyyang.eyepetizer.modle
 
-import com.andyyang.eyepetizer.io_main
 import com.andyyang.eyepetizer.modle.bean.Issue
-import com.andyyang.eyepetizer.net.NetWork
 import io.reactivex.Flowable
 
 /**
