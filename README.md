@@ -13,6 +13,7 @@
 
 * MVP
 * [Kotlin](https://github.com/JetBrains/kotlin)
+* [Kodein](https://kodein.org/Kodein-DI)
 * [Rxjava](https://github.com/ReactiveX/RxJava)
 * [Retrofit](https://github.com/square/retrofit)
 * [Okhttp3](https://github.com/square/okhttp)
@@ -45,7 +46,7 @@
 
 ## 关于我
 
-#### * [GitHup](https://github.com/MyLucifer)
+#### * [GitHub](https://github.com/AndyYang2014)
 #### * [个人博客](http://www.andyyang2014.com/)
 #### * 邮箱:Andyyang2014@126.com
 
