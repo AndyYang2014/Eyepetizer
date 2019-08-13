@@ -2,22 +2,7 @@ package com.andyyang.eyepetizer.utils;
 
 import android.annotation.SuppressLint;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -29,14 +14,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/05/03
- *     desc  : 文件相关工具类
- * </pre>
+ * Created by liuyang on 2019/8/13.
  */
-public final class FileUtils {
+public class FileUtils {
 
     private FileUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");

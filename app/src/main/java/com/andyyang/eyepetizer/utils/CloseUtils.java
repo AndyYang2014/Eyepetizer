@@ -4,11 +4,9 @@ import java.io.Closeable;
 import java.io.IOException;
 
 /**
- * Created by AndyYang
- * date:2017/10/16.
- * mail:andyyang2014@126.com
+ * Created by liuyang on 2019/8/13.
  */
-public final class CloseUtils {
+public class CloseUtils {
 
     private CloseUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");

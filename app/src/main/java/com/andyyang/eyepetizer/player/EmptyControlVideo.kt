@@ -30,9 +30,9 @@ class EmptyControlVideo(context: Context?, attrs: AttributeSet?) : StandardGSYVi
         mBrightness = false
     }
 
-    override fun getLayoutId(): Int {
-        return R.layout.empty_control_video
-    }
+//    override fun getLayoutId(): Int {
+//        return R.layout.empty_control_video
+//    }
 
 
     open class EmptyControlVideoCallBack : VideoAllCallBack {

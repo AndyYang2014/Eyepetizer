@@ -1,19 +1,17 @@
 package com.andyyang.eyepetizer.utils
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 /**
- * Created by AndyYang
- * date:2018/4/27.
- * mail:andyyang2014@126.com
+ *Created by liuyang on 2019/8/13.
  */
 class PermissionHelper(private val mActivity: Activity) {
 
@@ -53,13 +51,13 @@ class PermissionHelper(private val mActivity: Activity) {
                 if (PackageManager.PERMISSION_GRANTED != grantResults[0]) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, permissions[0])) {
                         val builder = AlertDialog.Builder(mActivity).setTitle("权限申请").setMessage(findPermissionExplain(permissions[0]))
-                                .setPositiveButton("确定") { dialog, which -> applyPermissions() }
+                            .setPositiveButton("确定") { dialog, which -> applyPermissions() }
                         builder.setCancelable(false)
                         builder.show()
                     } else {
                         val builder = AlertDialog.Builder(mActivity).setTitle("权限申请")
-                                .setMessage("请在打开的窗口的权限中开启" + findPermissionName(permissions[0]) + "权限，以正常使用本应用")
-                                .setPositiveButton("去设置") { dialog, which -> openApplicationSettings(REQUEST_OPEN_APPLICATION_SETTINGS_CODE) }.setNegativeButton("取消") { dialog, which -> mActivity.finish() }
+                            .setMessage("请在打开的窗口的权限中开启" + findPermissionName(permissions[0]) + "权限，以正常使用本应用")
+                            .setPositiveButton("去设置") { dialog, which -> openApplicationSettings(REQUEST_OPEN_APPLICATION_SETTINGS_CODE) }.setNegativeButton("取消") { dialog, which -> mActivity.finish() }
                         builder.setCancelable(false)
                         builder.show()
                     }
@@ -104,14 +102,14 @@ class PermissionHelper(private val mActivity: Activity) {
 
     private fun findPermissionExplain(permission: String): String? {
         return mPermissionModels
-                .firstOrNull { it.permission == permission }
-                ?.explain
+            .firstOrNull { it.permission == permission }
+            ?.explain
     }
 
     private fun findPermissionName(permission: String): String? {
         return mPermissionModels
-                .firstOrNull { it.permission == permission }
-                ?.name
+            .firstOrNull { it.permission == permission }
+            ?.name
     }
 
     data class PermissionModel(val name: String, val permission: String, val explain: String, val requestCode: Int)
