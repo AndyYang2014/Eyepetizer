@@ -57,8 +57,8 @@ dependencies {
     implementation project(path: ':network')
 
     api 'com.jcodecraeer:xrecyclerview:1.5.9'
-    api 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
-    api 'com.shuyu:GSYVideoPlayer:2.0.4'
-    api 'zlc.season:rxdownload2:1.1.1'
+    api 'com.ashokvarma.android:bottom-navigation-bar:2.1.0'
+    api 'com.shuyu:GSYVideoPlayer:7.0.2'
+    api 'zlc.season:rxdownload3:1.2.7'
 
 }

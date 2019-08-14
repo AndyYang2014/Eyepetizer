@@ -1,5 +1,6 @@
 package com.andyyang.eyepetizer.ui.splash
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
 import com.andyyang.common.base.repository.BaseRepositoryBoth
@@ -10,9 +11,10 @@ import com.andyyang.network.api.ServiceManager
 import com.andyyang.network.entity.GankInfo
 import com.andyyang.network.entity.Result
 import io.reactivex.Flowable
-import io.reactivex.Observable
-import zlc.season.rxdownload2.RxDownload
-import zlc.season.rxdownload2.entity.DownloadStatus
+import zlc.season.rxdownload3.RxDownload
+import zlc.season.rxdownload3.core.Mission
+import zlc.season.rxdownload3.core.Status
+import zlc.season.rxdownload3.core.Succeed
 import java.io.File
 
 class SplashRepository(
@@ -25,7 +27,7 @@ class SplashRepository(
         return info._id + "." + type[type.size - 1]
     }
 
-    fun randomGirl(): Observable<DownloadStatus> {
+    fun getRandomGirl(): Flowable<Status> {
         return remoteDataSource.randomGirl()
             .filter {
                 it.results.isNotEmpty()
@@ -35,20 +37,25 @@ class SplashRepository(
                 val savename = createFileName(info)
                 val appDir = localDataSource.mkdirFile()
                 localDataSource.isExists(savename)
-                Triple(info.url, savename, appDir)
+                Mission(info.url, savename, appDir.absolutePath)
             }
-            .toObservable()
-            .flatMap {
-                RxDownload.getInstance()
-                    .download(it.first, it.second, it.third.absolutePath)
-                    .doOnComplete {
-                       localDataSource.saveGirl(it)
+            .flatMap { mission ->
+                RxDownload
+                    .create(mission)
+                    .filter {
+                        it is Succeed
+                    }
+                    .doOnNext {
+                        localDataSource.saveGirl(mission)
                     }
             }
 
     }
 
-
+    fun getDefaultBg(onInit: () -> Unit, onNext: (Bitmap) -> Unit) {
+        return localDataSource.getDefaultBg(onInit, onNext)
+    }
+    
 }
 
 class SplashRemoteDataSource(
@@ -65,12 +72,12 @@ class SplashLocalDataSource : ILocalDataSource {
 
     private var appDir: File? = null
 
-    fun saveGirl(it: Triple<String, String, File>) {
-        val cachefile = File(it.third, "cache.txt")
+    fun saveGirl(it: Mission) {
+        val cachefile = File(it.savePath, "cache.txt")
         if (cachefile.exists()) {
             cachefile.delete()
         }
-        FileUtils.writeFileFromString(cachefile, it.second, true)
+        FileUtils.writeFileFromString(cachefile, it.saveName, true)
 
     }
 
@@ -91,22 +98,22 @@ class SplashLocalDataSource : ILocalDataSource {
         }
     }
 
-/*
-    val cachefile = File(appDir, "cache.txt")
-    if (cachefile.exists())
-    {
-        isCache = true
-        val path = FileUtils.readFile2String(cachefile, "UTF-8")
-        val imgpath = File(appDir!!.absolutePath + File.separator, path)
-        if (imgpath.exists()) {
-            val bitmap = BitmapFactory.decodeFile(appDir!!.absolutePath + File.separator + path.trim())
-            splash_bg.setImageBitmap(bitmap)
-            setAnimation()
+    fun getDefaultBg(onInit: () -> Unit, onNext: (Bitmap) -> Unit) {
+        val appDir = mkdirFile()
+
+        val cachefile = File(appDir, "cache.txt")
+        if (cachefile.exists()) {
+            val path = FileUtils.readFile2String(cachefile, "UTF-8")
+            val imgpath = File(appDir.absolutePath + File.separator, path)
+            if (imgpath.exists()) {
+                val bitmap = BitmapFactory.decodeFile(appDir.absolutePath + File.separator + path.trim())
+                onNext(bitmap)
+            } else {
+                onInit()
+            }
         } else {
-            showDefaultImg()
+            onInit()
         }
-    } else
-    {
-        showDefaultImg()
-    }*/
+    }
+
 }

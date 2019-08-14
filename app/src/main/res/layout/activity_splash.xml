@@ -10,6 +10,7 @@
                     android:layout_height="match_parent">
 
         <ImageView
+                imageDrawable="@{vm.bgDrawable}"
                 android:id="@+id/splash_bg"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"

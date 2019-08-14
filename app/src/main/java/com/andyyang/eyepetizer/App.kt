@@ -10,6 +10,8 @@ import org.kodein.di.android.androidModule
 import org.kodein.di.android.x.androidXModule
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.singleton
+import zlc.season.rxdownload3.RxDownload
+import zlc.season.rxdownload3.core.DownloadConfig
 
 /**
  * Created by liuyang on 2019/8/13.
@@ -22,5 +24,18 @@ class App : BaseApp(), KodeinAware {
         import(androidXModule(this@App))
         import(serviceModule)
         import(httpClientModule)
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        initRxDownload()
+    }
+
+    private fun initRxDownload() {
+        val builder = DownloadConfig.Builder.create(this)
+            .enableAutoStart(true)
+            .enableDb(true)
+
+        DownloadConfig.init(builder)
     }
 }
