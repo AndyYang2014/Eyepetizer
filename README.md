@@ -1,15 +1,28 @@
-# Eyepetizer-Kotlin
+# Eyepetizer-Kotlin-MVVM
 
-#####      开眼视频是一款精品短视频日报应用，该项目是用kotlin，借助已知的一些开眼接口写的一个仿《开眼App》，主要是为了学习kotlin和一些UI效果
+#####      开眼视频是一款精品短视频日报应用，该项目采用kotlin语言以及MVVM架构，借助已知的一些开眼接口写的一个仿《开眼App》，主要是为了学习Jetpack相关架构组件。
 
-### [点击下载Apk](https://github.com/AndyYang2014/Eyepetizer/raw/master/app/release/app-release.apk)
 
-## Kotlin
 
-  让你的代码量大大减少，lambda、扩展函数、空安全、函数式编程让你爽到飞上天！与此同时告别findViewById直接使用控件id为所欲为。
+## Android Architecture Components
+
+####[DataBinding](https://developer.android.com/topic/libraries/data-binding)
+
+####[Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+
+####[Livedata](https://developer.android.com/topic/libraries/architecture/livedata)
+https://github.com/AndyYang2014/Eyepetizer/blob/mvvm/img/Architecture.png
+####[Navigation](https://developer.android.com/guide/navigation)
+
+####[Paging](https://developer.android.com/topic/libraries/architecture/paging)
+
+####[Room](https://developer.android.com/topic/libraries/architecture/room)
+
+####[ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 
 ## 项目模式
+![项目架构](https://github.com/AndyYang2014/Eyepetizer/blob/mvvm/img/Architecture.png)
 
 * MVP
 * [Kotlin](https://github.com/JetBrains/kotlin)
@@ -33,6 +46,10 @@
 
   主要流程如下： 用户与View交互，View得知用户需要加载数据，告知Presenter，Presenter则告知Model，Model拿到数据反交于Prsenter，Presenter将数据交给View进行展示。
 
+##APK下载
+
+### [点击下载Apk](https://github.com/AndyYang2014/Eyepetizer/raw/master/app/release/app-release.apk)
+
 
 ## 参考配置  
 
@@ -46,8 +63,8 @@
 
 ## 关于我
 
-#### * [GitHub](https://github.com/AndyYang2014)
-#### * [个人博客](http://www.andyyang2014.com/)
+#### * [GitHub：github.com/AndyYang2014](https://github.com/AndyYang2014)
+#### * [个人博客：www.andyyang2014.com](http://www.andyyang2014.com/)
 #### * 邮箱:Andyyang2014@126.com
 
 
