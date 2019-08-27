@@ -6,26 +6,29 @@
 
 ## Android Architecture Components
 
-####[DataBinding](https://developer.android.com/topic/libraries/data-binding)
+#### [DataBinding](https://developer.android.com/topic/libraries/data-binding)
 
-####[Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+#### [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
-####[Livedata](https://developer.android.com/topic/libraries/architecture/livedata)
-https://github.com/AndyYang2014/Eyepetizer/blob/mvvm/img/Architecture.png
-####[Navigation](https://developer.android.com/guide/navigation)
+#### [Livedata](https://developer.android.com/topic/libraries/architecture/livedata)
 
-####[Paging](https://developer.android.com/topic/libraries/architecture/paging)
+#### [Navigation](https://developer.android.com/guide/navigation)
 
-####[Room](https://developer.android.com/topic/libraries/architecture/room)
+#### [Paging](https://developer.android.com/topic/libraries/architecture/paging)
 
-####[ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+#### [Room](https://developer.android.com/topic/libraries/architecture/room)
+
+#### [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 
 ## 项目模式
 ![项目架构](https://github.com/AndyYang2014/Eyepetizer/blob/mvvm/img/Architecture.png)
 
-* MVP
+
+## 使用到的开源库 
+
 * [Kotlin](https://github.com/JetBrains/kotlin)
+* [AndroidX](https://developer.android.com/jetpack/androidx)
 * [Kodein](https://kodein.org/Kodein-DI)
 * [Rxjava](https://github.com/ReactiveX/RxJava)
 * [Retrofit](https://github.com/square/retrofit)
@@ -37,15 +40,6 @@ https://github.com/AndyYang2014/Eyepetizer/blob/mvvm/img/Architecture.png
 * [BottomNavigation](https://github.com/Ashok-Varma/BottomNavigation)
 
 
-## MVP 
-  通过LifeCycle接口让View与Presenter通信，并使用OnLifeCycleListener让Presenter持有View层的生命周期。
-
-  * Model -- 主要处理业务，用于数据的获取(如网络、本地缓存)。
-  * View -- 用于把数据展示，并且提供交互。
-  * Presenter -- View和Model交互的桥梁，二者通过Presenter建立联系。
-
-  主要流程如下： 用户与View交互，View得知用户需要加载数据，告知Presenter，Presenter则告知Model，Model拿到数据反交于Prsenter，Presenter将数据交给View进行展示。
-
 ##APK下载
 
 ### [点击下载Apk](https://github.com/AndyYang2014/Eyepetizer/raw/master/app/release/app-release.apk)
@@ -53,12 +47,11 @@ https://github.com/AndyYang2014/Eyepetizer/blob/mvvm/img/Architecture.png
 
 ## 参考配置  
 
-    as:3.0   
-	grade:3.0.1       
-	compileSdkVersion 27
-	buildToolsVersion "27.0.1"
-	minSdkVersion 17
-    targetSdkVersion 27
+    as:3.4.1   
+	grade:3.4.1       
+	compileSdkVersion 28
+	minSdkVersion 19
+    targetSdkVersion 28
 
 
 ## 关于我
